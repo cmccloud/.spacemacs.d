@@ -84,35 +84,3 @@ instance of cider repl."
   "Instruments top level defun under point."
   (interactive)
   (eval-defun t))
-
-
-
-;;; Deprecated Function Defs
-
-;; pdf-view-mode popwin fixes
-;; (defun mcc-pdf-view-save (&optional args)
-;;   (cl-loop for win in (window-list)
-;;            do (with-selected-window win
-;;                 (when (eql major-mode 'pdf-view-mode)
-;;                   (setq-local pdf-view-last-visited-page
-;;                               (pdf-view-current-page))))))
-
-;; (defun mcc-pdf-view-restore (&optional args)
-;;   (cl-loop for win in (window-list)
-;;            do (with-selected-window win
-;;                 (when (eql major-mode 'pdf-view-mode)
-;;                   (pdf-view-goto-page pdf-view-last-visited-page)))))
-
-;; ;; doc-view-mode popwin fixes
-;; (defun mcc-doc-save ()
-;;   (cl-loop for win in (window-list)
-;;            do (with-selected-window win
-;;                 (when (eql major-mode 'doc-view-mode)
-;;                   (setq-local doc-view-last-visited-page
-;;                               (doc-view-current-page))))))
-
-;; (defun mcc-doc-restore ()
-;;   (cl-loop for win in (window-list)
-;;            do (with-selected-window win
-;;                 (when (eql major-mode 'doc-view-mode)
-;;                   (doc-view-goto-page doc-view-last-visited-page)))))

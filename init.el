@@ -31,8 +31,7 @@
      lispy
      persp-mode
      edebug
-     pdf-tools
-     )
+     pdf-tools)
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages then consider to create a layer, you can also put the
