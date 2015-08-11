@@ -151,7 +151,7 @@ before layers configuration."
    ;; Select a scope to highlight delimiters. Possible values are `any',
    ;; `current', `all' or `nil'. Default is `all' (highlight any scope and
    ;; emphasis the current one).
-   dotspacemacs-highlight-delimiters 'all
+   dotspacemacs-highlight-delimiters nil
    ;; If non nil advises quit functions to keep server open when quitting.
    dotspacemacs-persistent-server nil
    ;; List of search tool executable names. Spacemacs uses the first installed
@@ -164,18 +164,11 @@ before layers configuration."
    ;; Sequence of keys equivalent to <ESC>
    ;; default value: "fd"
    evil-escape-key-sequence "df")
-  ;; ------------------------------
-  ;; User initialization Settings
-  ;; ------------------------------
 
-  ;; load pop-repl
-  (load "~/.spacemacs.d/pop-repl.el")
+  ;; ---------------------------------
+  ;; Use Package Hooks
+  ;; ---------------------------------
 
-  ;; build file cache
-  (file-cache-add-directory-list
-   '("~/Documents/Programming Books/"))
-
-  ;; use package hooks
   (spacemacs|use-package-add-hook evil
     :post-config
     (progn
@@ -254,6 +247,58 @@ before layers configuration."
   (spacemacs|use-package-add-hook popwin
     :post-config
     (progn
+      ;; adds pop-repl
+      (defvar mcc-repl-table (make-hash-table)
+        "Associates major modes to repl enviroments.")
+
+      ;; generic command
+      (defun mcc-pop-repl ()
+        "Uses the current major mode to call for a REPL using `mcc-repl-table'."
+        (interactive)
+        (funcall (gethash major-mode mcc-repl-table (lambda ()))))
+
+      ;; cider repl
+      (defun mcc--pop-cider-repl ()
+        "Toggles as a popwin window the first active instance of cider repl."
+        (when (get-buffer "*cider-repl localhost*")
+          (if (get-buffer-window "*cider-repl localhost*" t)
+              (progn
+                (popwin:close-popup-window t)
+                ;; only if popwin failed
+                (-when-let (retry (get-buffer-window "*cider-repl localhost*" t))
+                  (delete-window retry)))
+            (popwin:popup-buffer
+             "*cider-repl localhost*"
+             :position 'bottom
+             :height .3
+             :stick t
+             :tail t
+             :noselect t
+             :dedicated t))))
+
+      ;; ielm repl
+      (defun mcc--pop-ielm-repl ()
+        "Displays as a popup window ielm instance. Uses existing buffer if found."
+        (let ((instance (get-buffer "*ielm*"))
+              (options '("*ielm*" :position bottom :height .4 :stick t :tail t :noselect nil :dedicated t))
+              (buf (current-buffer)))
+          (cond ((null instance)
+                 (ielm)
+                 (switch-to-buffer buf)
+                 (apply 'popwin:popup-buffer options))
+                ((get-buffer-window "*ielm*" t)
+                 (popwin:close-popup-window t)
+                 ;; only if popwin failed
+                 (-when-let (retry (get-buffer-window "*ielm*" t))
+                   (delete-window retry)))
+                (t (apply 'popwin:popup-buffer options)))))
+
+      ;; Associations
+      (puthash 'inferior-emacs-lisp-mode #'mcc--pop-ielm-repl mcc-repl-table)
+      (puthash 'emacs-lisp-mode #'mcc--pop-ielm-repl mcc-repl-table)
+      (puthash 'clojure-mode #'mcc--pop-cider-repl mcc-repl-table)
+      (puthash 'cider-repl-mode #'mcc--pop-cider-repl mcc-repl-table)
+
       ;; additional popwin managed windows
       (defun spacemacs/popwin-manage-window (&rest windows)
         "Adds window to `popwin:special-display-config' with default settings."
@@ -294,6 +339,10 @@ layers configuration."
   ;; default toggles
   (semantic-mode)
   (spacemacs/toggle-vi-tilde-fringe-off)
+
+  ;; build file cache
+  (file-cache-add-directory-list
+   '("~/Documents/Programming Books/"))
 
   ;; performance
   (setq bidi-display-reordering nil)
