@@ -24,7 +24,7 @@ instance of cider repl."
       (popwin:popup-buffer
        "*cider-repl localhost*"
        :position 'bottom
-       :height .2
+       :height .3
        :stick t
        :tail t
        :noselect t
@@ -52,35 +52,3 @@ instance of cider repl."
 (puthash 'emacs-lisp-mode #'mcc--pop-ielm-repl mcc-repl-table)
 (puthash 'clojure-mode #'mcc--pop-cider-repl mcc-repl-table)
 (puthash 'cider-repl-mode #'mcc--pop-cider-repl mcc-repl-table)
-
-(defun mcc-pop-win-push (&rest windows)
-  "Adds window to popwin:special-display-config with default settings"
-  (let ((settings '(:dedicated t :position bottom :stick t :noselect nil :height 0.4)))
-    (while windows
-      (push (cons (pop windows) settings) popwin:special-display-config))))
-
-;; Helm Describe Bindings Helpers
-(defun mcc-helm-desc-major-mode-bindings ()
-  (interactive)
-  (helm-descbinds " m"))
-
-(defun mcc-filter-descbinds (next candidates)
-  "next :: function in advice chain, candidates :: list of (key . command)"
-  (->> candidates
-       (--filter (not (member (cdr it) helm-descbinds-strings-to-ignore)))
-       (funcall next)))
-
-(defun helm-find-contrib-file ()
-  "Runs helm find files on spacemacs contrib folder"
-  (interactive)
-  (helm-find-files-1 (expand-file-name (concat user-emacs-directory "contrib/"))))
-
-(defun helm-find-spacemacs-file ()
-  "Runs helm find files on spacemacs directory"
-  (interactive)
-  (helm-find-files-1 (expand-file-name (concat user-emacs-directory "spacemacs/"))))
-
-(defun mcc-instrument-with-edebug ()
-  "Instruments top level defun under point."
-  (interactive)
-  (eval-defun t))

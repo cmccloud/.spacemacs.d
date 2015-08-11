@@ -168,8 +168,8 @@ before layers configuration."
   ;; User initialization Settings
   ;; ------------------------------
 
-  ;; load helper functions
-  (load "~/.spacemacs.d/helper-funcs.el")
+  ;; load pop-repl
+  (load "~/.spacemacs.d/pop-repl.el")
 
   ;; build file cache
   (file-cache-add-directory-list
@@ -210,6 +210,16 @@ before layers configuration."
   (spacemacs|use-package-add-hook helm
     :post-config
     (progn
+      (defun helm-find-contrib-file ()
+        "Runs helm find files on spacemacs contrib folder"
+        (interactive)
+        (helm-find-files-1 (expand-file-name (concat user-emacs-directory "contrib/"))))
+
+      (defun helm-find-spacemacs-file ()
+        "Runs helm find files on spacemacs directory"
+        (interactive)
+        (helm-find-files-1 (expand-file-name (concat user-emacs-directory "spacemacs/"))))
+
       ;; helm for files settings
       (setq helm-for-files-preferred-list
             '(helm-source-buffers-list
@@ -239,8 +249,24 @@ before layers configuration."
 
       ;; user reserved key-bindings
       (define-key global-map (kbd "C-c r") 'helm-semantic-or-imenu)
-      (define-key global-map (kbd "C-c e") 'eval-defun)
-      (define-key global-map (kbd "C-c i") 'mcc-instrument-with-edebug))))
+      (define-key global-map (kbd "C-c e") 'eval-defun)))
+
+  (spacemacs|use-package-add-hook popwin
+    :post-config
+    (progn
+      ;; additional popwin managed windows
+      (defun spacemacs/popwin-manage-window (&rest windows)
+        "Adds window to `popwin:special-display-config' with default settings."
+        (let ((settings '(:dedicated t :position bottom :stick t :noselect nil :height 0.4)))
+          (while windows
+            (push (cons (pop windows) settings) popwin:special-display-config))))
+
+      (spacemacs/popwin-manage-window
+       "*Compile-Log*"
+       "*Process List*"
+       "*Agenda Commands*"
+       "*trace-output*"
+       "*Diff*"))))
 
 (defun dotspacemacs/config ()
   "Configuration function.
