@@ -1,0 +1,16 @@
+* Compatibility with Other Modes
+ - [X] Persp Mode Fixes
+ - [X] Popwin Fixes
+ - [X] Perspective Fixes
+   - Alter package name before pull request
+ - [X] Eyebrowse Fixes
+ - [X] Ace Jump Mode
+   - Can we filter windows available to ace?
+ - [X] Avy Mode
+   - Avy does this automatically.
+* TODO Replace PDF-tools Occur with Helm
+- [X] Basic Async Search using Helm PDF-Grep
+- [ ] Build out async handler using PDF-tools server. See[[file:~/.emacs.d/elpa/pdf-tools-20150716.643/pdf-occur.el][ Async Occur Function]] 
+* TODO Keybindings
+* TODO Documentation
+* TODO Tweak Initialization Behavior

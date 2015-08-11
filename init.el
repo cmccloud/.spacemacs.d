@@ -30,16 +30,17 @@
      ;; my configuration layers
      lispy
      persp-mode
-     edebug
-     pdf-tools)
+     )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages then consider to create a layer, you can also put the
    ;; configuration in `dotspacemacs/config'.
    dotspacemacs-additional-packages
-   '(material-theme
+   '(
+     material-theme
      color-theme-sanityinc-tomorrow
-     base16-theme)
+     base16-theme
+     )
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '()
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
@@ -58,7 +59,7 @@ before layers configuration."
    ;; is `emacs' then the `holy-mode' is enabled at startup.
    dotspacemacs-editing-style 'vim
    ;; If non nil output loading progress in `*Messages*' buffer.
-   dotspacemacs-verbose-loading t
+   dotspacemacs-verbose-loading nil
    ;; Specify the startup banner. Default value is `official', it displays
    ;; the official spacemacs logo. An integer value is the index of text
    ;; banner, `random' chooses a random text banner in `core/banners'
@@ -84,7 +85,7 @@ before layers configuration."
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
    dotspacemacs-default-font '("M+ 1mn"
-                               :size 14
+                               :size 15
                                :weight normal
                                :width normal
                                :powerline-scale 1.1)
@@ -146,11 +147,12 @@ before layers configuration."
    dotspacemacs-smooth-scrolling t
    ;; If non-nil smartparens-strict-mode will be enabled in programming modes.
    dotspacemacs-smartparens-strict-mode nil
-   ;; Select a scope to highlight delimiters. Possible value is `all',
-   ;; `current' or `nil'. Default is `all'
-   dotspacemacs-highlight-delimiters 'nil
+   ;; Select a scope to highlight delimiters. Possible values are `any',
+   ;; `current', `all' or `nil'. Default is `all' (highlight any scope and
+   ;; emphasis the current one).
+   dotspacemacs-highlight-delimiters 'all
    ;; If non nil advises quit functions to keep server open when quitting.
-   dotspacemacs-persistent-server t
+   dotspacemacs-persistent-server nil
    ;; List of search tool executable names. Spacemacs uses the first installed
    ;; tool of the list. Supported tools are `ag', `pt', `ack' and `grep'.
    dotspacemacs-search-tools '("ag" "pt" "ack" "grep")
@@ -160,7 +162,9 @@ before layers configuration."
    dotspacemacs-default-package-repository nil
    ;; Sequence of keys equivalent to <ESC>
    ;; default value: "fd"
-   evil-escape-key-sequence "df"))
+   evil-escape-key-sequence "df")
+  ;; User initialization goes here
+  )
 
 (defun dotspacemacs/config ()
   "Configuration function.
@@ -191,44 +195,31 @@ layers configuration."
           helm-source-file-cache
           helm-source-locate
           helm-source-buffer-not-found))
-  (eval-after-load 'helm-projectile
-    (lambda nil
-      (setq helm-for-files-preferred-list
-            (-insert-at 1 'helm-source-projectile-files-list
-                        helm-for-files-preferred-list))))
-
-  ;; additional popwin special windows
-  (mcc-pop-win-push
-   "*cider-doc*"
-   "*cider-error*"
-   "*Compile-Log*"
-   "*Process List*"
-   "*Agenda Commands*"
-   "*trace-output*"
-   "*Diff*")
-
-  ;; Js2 mode settings
-  (eval-after-load 'js2-mode
-    (lambda nil
-      (setq js2-basic-offset 2
-            js2-include-node-extern t
-            js2-highlight-level 3
-            js2-missing-semi-one-line-override t
-            js2-strict-inconsistent-return-warning nil
-            js2-global-externs '("require" "setTimeout" "console"))))
+  (with-eval-after-load "helm-projectile"
+    (setq helm-for-files-preferred-list
+          '(helm-source-buffers-list
+            helm-source-projectile-files-list
+            helm-source-files-in-current-dir
+            helm-source-recentf
+            helm-source-file-cache
+            helm-source-locate
+            helm-source-buffer-not-found)))
 
   ;; misc settings
   (setq powerline-default-separator nil
-        ace-jump-mode-scope 'window
         avy-all-windows nil
+        avy-background t
         doc-view-continuous t
+        lispy-no-permanent-semantic t
         paradox-github-token t
         even-window-heights nil
+        smooth-scroll-margin 4          ; helps scroll lag for now
+        cider-ovelays-use-font-lock t   ; misspelled
         markdown-open-command "marked")
 
-  ;; appearance
-  (global-vi-tilde-fringe-mode -1)
-  (fringe-mode 0)
+  ;; default toggles
+  (semantic-mode)
+  (spacemacs/toggle-vi-tilde-fringe-off)
 
   ;; performance
   (setq bidi-display-reordering nil)
@@ -240,4 +231,3 @@ layers configuration."
 ;; auto-generate custom variable definitions.
 (setq custom-file "~/.spacemacs.d/custom.el")
 (load custom-file)
-

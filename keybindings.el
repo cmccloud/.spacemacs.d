@@ -18,17 +18,8 @@
 (define-key global-map [remap find-spacemacs-file] 'helm-find-spacemacs-file)
 (define-key global-map [remap find-contrib-file] 'helm-find-contrib-file)
 (define-key global-map [remap isearch-forward] 'helm-swoop)
-(define-key global-map [remap helm-pp-bookmarks] 'helm-filtered-bookmarks) ; fixed in #2247
 (define-key global-map [remap info-emacs-manual] 'helm-info-emacs)
 (define-key global-map [remap persp-switch] 'helm-perspectives)
-
-;; lispy bindings
-(define-key lispy-mode-map (kbd "C-?") 'helm-descbinds)
-(define-key lispy-mode-map (kbd "C-f") 'lispy-forward)
-(define-key lispy-mode-map (kbd "C-d") 'lispy-backward)
-(define-key lispy-mode-map (kbd "M-u") 'lispy-undo)
-(define-key lispy-mode-map (kbd "[") 'lispy-brackets)
-(define-key lispy-mode-map (kbd "{") 'lispy-braces)
 
 ;; helm multi-files
 (define-key global-map (kbd "C-f") 'helm-multi-files)
@@ -43,6 +34,15 @@
 (define-key evil-evilified-state-map (kbd "C-p") 'helm-projectile)
 (define-key evil-motion-state-map (kbd "C-p") 'helm-projectile)
 (define-key evil-insert-state-map (kbd "C-p") 'helm-projectile)
+
+;; lispy bindings
+(with-eval-after-load "lispy"
+  (define-key lispy-mode-map (kbd "C-?") 'helm-descbinds)
+  (define-key lispy-mode-map (kbd "C-f") 'lispy-forward)
+  (define-key lispy-mode-map (kbd "C-d") 'lispy-backward)
+  (define-key lispy-mode-map (kbd "M-u") 'lispy-undo)
+  (define-key lispy-mode-map (kbd "[") 'lispy-brackets)
+  (define-key lispy-mode-map (kbd "{") 'lispy-braces))
 
 ;; iedit-mode
 (define-key global-map (kbd "C-;") 'iedit-mode)

@@ -12,16 +12,13 @@
 
 ;; List of all packages to install and/or initialize. Built-in packages
 ;; which require an initialization must be listed explicitly in the list.
-(setq persp-mode-packages
-    '(
-      persp-mode
-      helm
-      ))
+(setq persp-mode-packages '(persp-mode
+                            helm))
 
 ;; List of packages to exclude.
 (setq persp-mode-excluded-packages '())
 
-(defun persp-mode/init-helm ()
+(defun persp-mode/pre-init-helm ()
   (spacemacs|use-package-add-hook helm
     :post-config
     (progn
@@ -41,14 +38,15 @@
     :preface
     (progn
       (defvar persp-mode-autosave t
-        "If non-nil, saves state to file every persp-autosave-interval seconds")
+        "If non-nil, saves perspectives to file every `persp-autosave-interval' seconds")
       (defvar persp-autosave-interval 900
-        "Delay in seconds between autosaves.")
+        "Delay in seconds between `persp-autosave'.")
       (defvar persp-autosave-timer nil
-        "Stores persp-autosave for removal on exit."))
-    :config
-    (progn
+        "Stores `persp-autosave' for removal on exit.")
       (defun persp-autosave ()
+        "Perspectives mode autosave.
+Autosaves perspectives layouts every `persp-autosave-interal' seconds.
+Cancels autosave on exiting perspectives mode."
         (message "Perspectives mode autosaving enabled.")
         (if persp-mode
             (setq persp-autosave-timer
@@ -58,7 +56,11 @@
                    (lambda ()
                      (message "Saving perspectives to file.")
                      (persp-save-state-to-file))))
-          (cancel-timer persp-autosave-timer)))
+          (when persp-autosave-timer
+            (cancel-timer persp-autosave-timer)
+            (setq persp-autosave-timer nil)))))
+    :config
+    (progn
       (setq persp-nil-name "@spacemacs")
       (spacemacs/declare-prefix "L" "layouts")
       (evil-leader/set-key
@@ -73,12 +75,3 @@
       (persp-mode t))))
 
 
-;; For each package, define a function persp-mode/init-<package-name>
-;;
-;; (defun persp-mode/init-my-package ()
-;;   "Initialize my package"
-;;   )
-;;
-;; Often the body of an initialize function uses `use-package'
-;; For more info on `use-package', see readme:
-;; https://github.com/jwiegley/use-package

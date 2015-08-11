@@ -1,0 +1,10 @@
+* TODO Diminish Mode line
+- [ ] Improve placement of perspectives name in powerline
+* DONE Using Helm to Switch Perspectives
+CLOSED: [2015-07-26 Sun 17:01]
+* TODO Using Helm to Add / Remove Perspectives
+* DONE Buffer Cycling should be limited to Perspective Local Buffers
+CLOSED: [2015-07-25 Sat 23:04]
+* DONE Auto-saving at timed intervals
+CLOSED: [2015-07-26 Sun 17:01]
+* TODO Filtering out current perspective from perspectives list
