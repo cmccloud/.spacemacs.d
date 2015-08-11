@@ -38,7 +38,17 @@ Used by `lispy-enter-maybe'.")
       (defun lispy-toggle ()
         "Toggles lispy mode."
         (interactive)
-        (if lispy-mode (lispy-mode -1) (lispy-mode))))))
+        (if lispy-mode (lispy-mode -1) (lispy-mode))))
+    :config
+    (progn
+      ;; lispy keybindings
+      (define-key global-map (kbd "C-c l") 'lispy-toggle)
+      (define-key lispy-mode-map (kbd "C-?") 'helm-descbinds)
+      (define-key lispy-mode-map (kbd "C-f") 'lispy-forward)
+      (define-key lispy-mode-map (kbd "C-d") 'lispy-backward)
+      (define-key lispy-mode-map (kbd "M-u") 'lispy-undo)
+      (define-key lispy-mode-map (kbd "[") 'lispy-brackets)
+      (define-key lispy-mode-map (kbd "{") 'lispy-braces))))
 
 (defun lispy/pre-init-evil ()
   (spacemacs|use-package-add-hook evil

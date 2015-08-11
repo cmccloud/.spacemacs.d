@@ -59,6 +59,7 @@ before layers configuration."
    ;; is `emacs' then the `holy-mode' is enabled at startup.
    dotspacemacs-editing-style 'vim
    ;; If non nil output loading progress in `*Messages*' buffer.
+   ;; Note that this setting can significantly increase loading time.
    dotspacemacs-verbose-loading nil
    ;; Specify the startup banner. Default value is `official', it displays
    ;; the official spacemacs logo. An integer value is the index of text
@@ -163,47 +164,94 @@ before layers configuration."
    ;; Sequence of keys equivalent to <ESC>
    ;; default value: "fd"
    evil-escape-key-sequence "df")
-  ;; User initialization goes here
-  )
+  ;; ------------------------------
+  ;; User initialization Settings
+  ;; ------------------------------
+
+  ;; load helper functions
+  (load "~/.spacemacs.d/helper-funcs.el")
+
+  ;; build file cache
+  (file-cache-add-directory-list
+   '("~/Documents/Programming Books/"))
+
+  ;; use package hooks
+  (spacemacs|use-package-add-hook evil
+    :post-config
+    (progn
+      ;; restore universal argument
+      (define-key global-map (kbd "C-u") 'universal-argument)
+      (define-key evil-normal-state-map (kbd "C-u") 'universal-argument)
+      (define-key evil-motion-state-map (kbd "C-u") 'universal-argument)
+      (define-key evil-insert-state-map (kbd "C-u") 'universal-argument)
+      (define-key evil-evilified-state-map (kbd "C-u") 'universal-argument)
+      (define-key evil-emacs-state-map (kbd "C-u") 'universal-argument)
+
+      ;; buffer switching
+      (define-key evil-normal-state-map "J" 'spacemacs/next-useful-buffer)
+      (define-key evil-normal-state-map "K" 'spacemacs/previous-useful-buffer)
+
+      ;; iedit-mode
+      (define-key global-map (kbd "C-;") 'iedit-mode)
+      (define-key evil-normal-state-map (kbd "C-;") 'iedit-mode)
+      (define-key evil-insert-state-map (kbd "C-;") 'iedit-mode)
+
+      ;; user reserved key-bindings
+      (evil-leader/set-key "or" 'mcc-pop-repl)
+      (evil-leader/set-key "ov" 'set-variable)
+
+      ;; helm multi-files
+      (define-key global-map (kbd "C-f") 'helm-multi-files)
+      (define-key evil-normal-state-map (kbd "C-f") 'helm-multi-files)
+      (define-key evil-evilified-state-map (kbd "C-f") 'helm-multi-files)
+      (define-key evil-motion-state-map (kbd "C-f") 'helm-multi-files)
+      (define-key evil-insert-state-map (kbd "C-f") 'helm-multi-files)))
+
+  (spacemacs|use-package-add-hook helm
+    :post-config
+    (progn
+      ;; helm for files settings
+      (setq helm-for-files-preferred-list
+            '(helm-source-buffers-list
+              helm-source-files-in-current-dir
+              helm-source-recentf
+              helm-source-file-cache
+              helm-source-locate
+              helm-source-buffer-not-found))
+
+      ;; helm projectile sources
+      (with-eval-after-load "helm-projectile"
+        (setq helm-for-files-preferred-list
+              (-insert-at 1 'helm-source-projectile-files-list
+                          helm-for-files-preferred-list)))
+
+      ;; prefer helm when available
+      (define-key global-map [remap info] 'helm-info-at-point)
+      (define-key global-map [remap find-file] 'helm-find-files)
+      (define-key global-map [remap list-buffers] 'helm-buffers-list)
+      (define-key global-map [remap switch-to-buffer] 'helm-buffers-list)
+      (define-key global-map [remap apropos-command] 'helm-apropos)
+      (define-key global-map [remap find-spacemacs-file] 'helm-find-spacemacs-file)
+      (define-key global-map [remap find-contrib-file] 'helm-find-contrib-file)
+      (define-key global-map [remap isearch-forward] 'helm-swoop)
+      (define-key global-map [remap info-emacs-manual] 'helm-info-emacs)
+      (define-key global-map [remap persp-switch] 'helm-perspectives)
+
+      ;; user reserved key-bindings
+      (define-key global-map (kbd "C-c r") 'helm-semantic-or-imenu)
+      (define-key global-map (kbd "C-c e") 'eval-defun)
+      (define-key global-map (kbd "C-c i") 'mcc-instrument-with-edebug))))
 
 (defun dotspacemacs/config ()
   "Configuration function.
  This function is called at the very end of Spacemacs initialization after
 layers configuration."
 
-  ;; load helper functions
-  (load "~/.spacemacs.d/helper-funcs.el")
-
-  ;; load keybindings
-  (load "~/.spacemacs.d/keybindings.el")
-
-  ;; build file cache
-  (file-cache-add-directory-list
-   '("~/Documents/Programming Books/"))
-
   ;; command as meta, option as super
   (setq mac-option-key-is-meta nil
         mac-command-key-is-meta t
         mac-command-modifier 'meta
         mac-option-modifier 'super)
-
-  ;; helm multi-files sources
-  (setq helm-for-files-preferred-list
-        '(helm-source-buffers-list
-          helm-source-files-in-current-dir
-          helm-source-recentf
-          helm-source-file-cache
-          helm-source-locate
-          helm-source-buffer-not-found))
-  (with-eval-after-load "helm-projectile"
-    (setq helm-for-files-preferred-list
-          '(helm-source-buffers-list
-            helm-source-projectile-files-list
-            helm-source-files-in-current-dir
-            helm-source-recentf
-            helm-source-file-cache
-            helm-source-locate
-            helm-source-buffer-not-found)))
 
   ;; misc settings
   (setq powerline-default-separator nil
