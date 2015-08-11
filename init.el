@@ -30,6 +30,7 @@
      ;; my configuration layers
      lispy
      persp-mode
+     popwin-pop-repl
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -190,7 +191,7 @@ before layers configuration."
       (define-key evil-insert-state-map (kbd "C-;") 'iedit-mode)
 
       ;; user reserved key-bindings
-      (evil-leader/set-key "or" 'mcc-pop-repl)
+      (evil-leader/set-key "or" 'popwin-pop-repl)
       (evil-leader/set-key "ov" 'set-variable)
 
       ;; helm multi-files
@@ -247,58 +248,6 @@ before layers configuration."
   (spacemacs|use-package-add-hook popwin
     :post-config
     (progn
-      ;; adds pop-repl
-      (defvar mcc-repl-table (make-hash-table)
-        "Associates major modes to repl enviroments.")
-
-      ;; generic command
-      (defun mcc-pop-repl ()
-        "Uses the current major mode to call for a REPL using `mcc-repl-table'."
-        (interactive)
-        (funcall (gethash major-mode mcc-repl-table (lambda ()))))
-
-      ;; cider repl
-      (defun mcc--pop-cider-repl ()
-        "Toggles as a popwin window the first active instance of cider repl."
-        (when (get-buffer "*cider-repl localhost*")
-          (if (get-buffer-window "*cider-repl localhost*" t)
-              (progn
-                (popwin:close-popup-window t)
-                ;; only if popwin failed
-                (-when-let (retry (get-buffer-window "*cider-repl localhost*" t))
-                  (delete-window retry)))
-            (popwin:popup-buffer
-             "*cider-repl localhost*"
-             :position 'bottom
-             :height .3
-             :stick t
-             :tail t
-             :noselect t
-             :dedicated t))))
-
-      ;; ielm repl
-      (defun mcc--pop-ielm-repl ()
-        "Displays as a popup window ielm instance. Uses existing buffer if found."
-        (let ((instance (get-buffer "*ielm*"))
-              (options '("*ielm*" :position bottom :height .4 :stick t :tail t :noselect nil :dedicated t))
-              (buf (current-buffer)))
-          (cond ((null instance)
-                 (ielm)
-                 (switch-to-buffer buf)
-                 (apply 'popwin:popup-buffer options))
-                ((get-buffer-window "*ielm*" t)
-                 (popwin:close-popup-window t)
-                 ;; only if popwin failed
-                 (-when-let (retry (get-buffer-window "*ielm*" t))
-                   (delete-window retry)))
-                (t (apply 'popwin:popup-buffer options)))))
-
-      ;; Associations
-      (puthash 'inferior-emacs-lisp-mode #'mcc--pop-ielm-repl mcc-repl-table)
-      (puthash 'emacs-lisp-mode #'mcc--pop-ielm-repl mcc-repl-table)
-      (puthash 'clojure-mode #'mcc--pop-cider-repl mcc-repl-table)
-      (puthash 'cider-repl-mode #'mcc--pop-cider-repl mcc-repl-table)
-
       ;; additional popwin managed windows
       (defun spacemacs/popwin-manage-window (&rest windows)
         "Adds window to `popwin:special-display-config' with default settings."
