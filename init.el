@@ -13,6 +13,8 @@
    dotspacemacs-configuration-layers
    '(
      (auto-completion :variables
+                      auto-completion-tab-key-behavior 'complete
+                      auto-completion-return-key-behavior nil
                       auto-completion-enable-snippets-in-popup t)
      (shell :variables
             shell-default-height 30
@@ -41,7 +43,6 @@
      material-theme
      color-theme-sanityinc-tomorrow
      base16-theme
-     mu4e
      )
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '()
@@ -170,33 +171,6 @@ before layers configuration."
   ;; ---------------------------------
   ;; Use Package Hooks
   ;; ---------------------------------
-  (use-package mu4e
-    ;; TODO: move to layer
-    :load-path "/usr/local/share/emacs/site-lisp/mu4e"
-    :commands mu4e
-    :init
-    (progn
-      (evil-leader/set-key "am" 'mu4e))
-    :config
-    (progn
-      (setq mu4e-maildir "~/.mail/gmail"
-            mu4e-drafts-folder "/[Gmail].Drafts"
-            mu4e-sent-folder "/[Gmail].Sent Mail"
-            mu4e-trash-folder "/[Gmail].Trash"
-            mu4e-get-mail-command "offlineimap -q"
-            mu4e-attachment-dir "~/Downloads"
-            mu4e-update-interval 300
-            mu4e-view-show-images t
-            mu4e-view-show-addresses t
-            mu4e-sent-messages-behavior 'delete
-            user-mail-address "mccloud.christopher@gmail.com"
-            user-full-name "Christopher McCloud"
-            message-send-mail-function 'smtpmail-send-it
-            smtpmail-stream-type 'starttls
-            smtpmail-default-smtp-server "smtp.gmail.com"
-            smtpmail-smtp-server "smtp.gmail.com"
-            smtpmail-smtp-service 587
-            message-kill-buffer-on-exit t)))
 
   (spacemacs|use-package-add-hook evil
     :post-config
@@ -320,6 +294,52 @@ layers configuration."
   ;; build file cache
   (file-cache-add-directory-list
    '("~/Documents/Programming Books/"))
+
+  ;; configure mu4e
+  ;; offlineimap file :: ~/.offlineimaprc
+  (use-package mu4e
+    :load-path "/usr/local/share/emacs/site-lisp/mu4e"
+    :commands mu4e
+    :init
+    (progn
+      ;; grab mu4e-shr2text
+      (require 'mu4e-contrib)
+      (evil-leader/set-key "am" 'mu4e)
+      (global-set-key (kbd "C-c m") 'mu4e-compose-new))
+    :config
+    (progn
+      ;; evilify maps
+      ;; TODO: keybinding support
+      ;; TODO: gmail tag importing
+      (evilify mu4e-main-mode mu4e-main-mode-map
+               "j" 'mu4e~headers-jump-to-maildir)
+      (evilify mu4e-headers-mode mu4e-headers-mode-map)
+      (evilify mu4e-view-mode mu4e-view-mode-map
+               "J" 'mu4e-view-headers-next
+               "K" 'mu4e-view-headers-prev)
+
+      (setq mu4e-maildir "~/.mail/gmail"
+            mu4e-drafts-folder "/[Gmail].Drafts"
+            mu4e-sent-folder "/[Gmail].Sent Mail"
+            mu4e-trash-folder "/[Gmail].Trash"
+            mu4e-get-mail-command "offlineimap -q"
+            mu4e-attachment-dir "~/Downloads"
+            mu4e-update-interval 600
+            mu4e-completing-read-function 'helm--completing-read-default
+            mu4e-view-show-images t
+            mu4e-view-prefer-html t
+            mu4e-html2text-command 'mu4e-shr2text
+            mu4e-headers-skip-duplicates t
+            mu4e-view-show-addresses t
+            mu4e-sent-messages-behavior 'delete
+            user-mail-address "mccloud.christopher@gmail.com"
+            user-full-name "Christopher McCloud"
+            message-send-mail-function 'smtpmail-send-it
+            smtpmail-stream-type 'starttls
+            smtpmail-default-smtp-server "smtp.gmail.com"
+            smtpmail-smtp-server "smtp.gmail.com"
+            smtpmail-smtp-service 587
+            message-kill-buffer-on-exit t)))
 
   ;; performance
   (setq bidi-display-reordering nil)
