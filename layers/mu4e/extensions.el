@@ -3,7 +3,7 @@
 ;; Copyright (c) 2012-2014 Sylvain Benner
 ;; Copyright (c) 2014-2015 Sylvain Benner & Contributors
 ;;
-;; Author: Sylvain Benner <sylvain.benner@gmail.com>
+;; Author: Christopher McCloud <mccloud.christopher@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
 ;;
 ;; This file is not part of GNU Emacs.
@@ -22,16 +22,6 @@
       (global-set-key (kbd "C-c m") 'mu4e-compose-new))
     :config
     (progn
-      ;; TODO: keybinding support
-      ;; TODO: folder nametransforms
-      ;; TODO: gmail tag importing
-      ;; TODO: custom bookmarks
-      ;;   - manage mailing lists
-      ;; TODO: contacts - completion
-      ;; TODO: spell check
-      ;; TODO: custom homescreen
-      ;; TODO: org-mode integration
-
       (require 'mu4e-contrib)
       ;; keybindings
       (evilify mu4e-main-mode mu4e-main-mode-map
@@ -44,6 +34,13 @@
       ;; mailbox shortcuts
       (setq mu4e-maildir-shortcuts
             '(("/INBOX" . ?i)))
+
+      ;; headers
+      (setq mu4e-headers-fields
+            '((:human-date . 12)
+              (:flags . 6)
+              (:from . 22)
+              (:subject)))
 
       ;; bookmarks
       (setq mu4e-bookmarks

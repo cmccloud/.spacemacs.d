@@ -209,12 +209,14 @@ before layers configuration."
       (defun helm-find-contrib-file ()
         "Runs helm find files on spacemacs contrib folder"
         (interactive)
-        (helm-find-files-1 (expand-file-name (concat user-emacs-directory "contrib/"))))
+        (helm-find-files-1
+         (expand-file-name (concat user-emacs-directory "contrib/"))))
 
       (defun helm-find-spacemacs-file ()
         "Runs helm find files on spacemacs directory"
         (interactive)
-        (helm-find-files-1 (expand-file-name (concat user-emacs-directory "spacemacs/"))))
+        (helm-find-files-1
+         (expand-file-name (concat user-emacs-directory "spacemacs/"))))
 
       ;; helm for files settings
       (setq helm-for-files-preferred-list
@@ -237,7 +239,8 @@ before layers configuration."
       (define-key global-map [remap list-buffers] 'helm-buffers-list)
       (define-key global-map [remap switch-to-buffer] 'helm-buffers-list)
       (define-key global-map [remap apropos-command] 'helm-apropos)
-      (define-key global-map [remap find-spacemacs-file] 'helm-find-spacemacs-file)
+      (define-key global-map [remap find-spacemacs-file]
+                             'helm-find-spacemacs-file)
       (define-key global-map [remap find-contrib-file] 'helm-find-contrib-file)
       (define-key global-map [remap isearch-forward] 'helm-swoop)
       (define-key global-map [remap info-emacs-manual] 'helm-info-emacs)
@@ -253,9 +256,14 @@ before layers configuration."
       ;; additional popwin managed windows
       (defun spacemacs/popwin-manage-window (&rest windows)
         "Adds window to `popwin:special-display-config' with default settings."
-        (let ((settings '(:dedicated t :position bottom :stick t :noselect nil :height 0.4)))
+        (let ((settings '(:dedicated t
+                          :position bottom
+                          :stick t
+                          :noselect nil
+                          :height 0.4)))
           (while windows
-            (push (cons (pop windows) settings) popwin:special-display-config))))
+            (push (cons (pop windows) settings)
+                  popwin:special-display-config))))
 
       (spacemacs/popwin-manage-window
        "*Compile-Log*"
