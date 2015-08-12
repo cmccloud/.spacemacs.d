@@ -269,6 +269,10 @@ before layers configuration."
  This function is called at the very end of Spacemacs initialization after
 layers configuration."
 
+  ;; introductions!
+  (setq user-full-name "Christopher McCloud"
+        user-mail-address "mccloud.christopher@gmail.com")
+
   ;; command as meta, option as super
   (setq mac-option-key-is-meta nil
         mac-command-key-is-meta t
@@ -299,18 +303,25 @@ layers configuration."
   ;; offlineimap file :: ~/.offlineimaprc
   (use-package mu4e
     :load-path "/usr/local/share/emacs/site-lisp/mu4e"
-    :commands mu4e
+    :commands (mu4e mu4e-compose-new)
     :init
     (progn
-      ;; grab mu4e-shr2text
-      (require 'mu4e-contrib)
       (evil-leader/set-key "am" 'mu4e)
       (global-set-key (kbd "C-c m") 'mu4e-compose-new))
     :config
     (progn
-      ;; evilify maps
       ;; TODO: keybinding support
+      ;; TODO: folder nametransforms
       ;; TODO: gmail tag importing
+      ;; TODO: custom bookmarks
+      ;;   - manage mailing lists
+      ;; TODO: contacts - completion
+      ;; TODO: spell check
+      ;; TODO: custom homescreen
+      ;; TODO: org-mode integration
+
+      (require 'mu4e-contrib)
+      ;; keybindings
       (evilify mu4e-main-mode mu4e-main-mode-map
                "j" 'mu4e~headers-jump-to-maildir)
       (evilify mu4e-headers-mode mu4e-headers-mode-map)
@@ -318,28 +329,57 @@ layers configuration."
                "J" 'mu4e-view-headers-next
                "K" 'mu4e-view-headers-prev)
 
-      (setq mu4e-maildir "~/.mail/gmail"
-            mu4e-drafts-folder "/[Gmail].Drafts"
-            mu4e-sent-folder "/[Gmail].Sent Mail"
-            mu4e-trash-folder "/[Gmail].Trash"
-            mu4e-get-mail-command "offlineimap -q"
+      ;; mailbox shortcuts
+      (setq mu4e-maildir-shortcuts
+            '(("/INBOX" . ?i)))
+
+      ;; bookmarks
+      (setq mu4e-bookmarks
+            '(("flag:flagged AND NOT flag:trashed"
+               "Flagged Messages" ?f)
+              ("flag:unread AND date:7d..now AND NOT flag:trashed"
+               "Latest Unread Messages" ?u)
+              ("date:7d..now AND NOT flag:trashed"
+               "Latest Messages" ?l)
+              ("flag:unread AND NOT flag:trashed"
+               "All Unread Messages" ?a)
+              ("date:today..now AND NOT flag:trashed"
+               "Today's messages" ?t)))
+
+      ;; include signature
+      (setq mu4e-compose-signature
+            (concat "Christopher McCloud\n"
+                    "mccloud.christopher@gmail.com\n")
+            mu4e-compose-signature-auto-include t)
+
+      (setq mu4e-get-mail-command "offlineimap -q"
             mu4e-attachment-dir "~/Downloads"
-            mu4e-update-interval 600
+            mu4e-update-interval 300
+            mu4e-confirm-quit nil
             mu4e-completing-read-function 'helm--completing-read-default
             mu4e-view-show-images t
             mu4e-view-prefer-html t
+            mu4e-compose-dont-reply-to-self t
+            mu4e-hide-index-messages t
+            mu4e-compose-complete-only-personal nil
             mu4e-html2text-command 'mu4e-shr2text
             mu4e-headers-skip-duplicates t
             mu4e-view-show-addresses t
             mu4e-sent-messages-behavior 'delete
-            user-mail-address "mccloud.christopher@gmail.com"
-            user-full-name "Christopher McCloud"
-            message-send-mail-function 'smtpmail-send-it
+            message-kill-buffer-on-exit t)
+
+      ;; maildirs
+      (setq mu4e-maildir "~/.mail/gmail"
+            mu4e-drafts-folder "/[Gmail].Drafts"
+            mu4e-sent-folder "/[Gmail].Sent Mail"
+            mu4e-trash-folder "/[Gmail].Trash")
+
+      ;; sending mail
+      (setq message-send-mail-function 'smtpmail-send-it
             smtpmail-stream-type 'starttls
             smtpmail-default-smtp-server "smtp.gmail.com"
             smtpmail-smtp-server "smtp.gmail.com"
-            smtpmail-smtp-service 587
-            message-kill-buffer-on-exit t)))
+            smtpmail-smtp-service 587)))
 
   ;; performance
   (setq bidi-display-reordering nil)
