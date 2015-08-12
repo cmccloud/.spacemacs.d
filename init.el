@@ -41,6 +41,7 @@
      material-theme
      color-theme-sanityinc-tomorrow
      base16-theme
+     mu4e
      )
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '()
@@ -169,6 +170,33 @@ before layers configuration."
   ;; ---------------------------------
   ;; Use Package Hooks
   ;; ---------------------------------
+  (use-package mu4e
+    ;; TODO: move to layer
+    :load-path "/usr/local/share/emacs/site-lisp/mu4e"
+    :commands mu4e
+    :init
+    (progn
+      (evil-leader/set-key "am" 'mu4e))
+    :config
+    (progn
+      (setq mu4e-maildir "~/.mail/gmail"
+            mu4e-drafts-folder "/[Gmail].Drafts"
+            mu4e-sent-folder "/[Gmail].Sent Mail"
+            mu4e-trash-folder "/[Gmail].Trash"
+            mu4e-get-mail-command "offlineimap -q"
+            mu4e-attachment-dir "~/Downloads"
+            mu4e-update-interval 300
+            mu4e-view-show-images t
+            mu4e-view-show-addresses t
+            mu4e-sent-messages-behavior 'delete
+            user-mail-address "mccloud.christopher@gmail.com"
+            user-full-name "Christopher McCloud"
+            message-send-mail-function 'smtpmail-send-it
+            smtpmail-stream-type 'starttls
+            smtpmail-default-smtp-server "smtp.gmail.com"
+            smtpmail-smtp-server "smtp.gmail.com"
+            smtpmail-smtp-service 587
+            message-kill-buffer-on-exit t)))
 
   (spacemacs|use-package-add-hook evil
     :post-config
