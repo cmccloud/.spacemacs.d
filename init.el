@@ -21,8 +21,10 @@
             shell-default-position 'bottom
             shell-default-shell 'eshell)
      syntax-checking
+     erc
      org
      git
+     github
      version-control
      emacs-lisp
      clojure
@@ -240,7 +242,7 @@ before layers configuration."
       (define-key global-map [remap switch-to-buffer] 'helm-buffers-list)
       (define-key global-map [remap apropos-command] 'helm-apropos)
       (define-key global-map [remap find-spacemacs-file]
-                             'helm-find-spacemacs-file)
+        'helm-find-spacemacs-file)
       (define-key global-map [remap find-contrib-file] 'helm-find-contrib-file)
       (define-key global-map [remap isearch-forward] 'helm-swoop)
       (define-key global-map [remap info-emacs-manual] 'helm-info-emacs)
@@ -250,6 +252,17 @@ before layers configuration."
       (define-key global-map (kbd "C-c r") 'helm-semantic-or-imenu)
       (define-key global-map (kbd "C-c e") 'eval-defun)))
 
+  (spacemacs|use-package-add-hook erc
+    :post-config
+    (progn
+      ;; TODO: mode-line channels
+      ;; TODO: storing passwords safely
+      (setq erc-autojoin-channels-alist
+            '(("1\\.0\\.0" "#syl20bnr/spacemacs" "#clojure-emacs/cider"
+               "#magit/magit")
+              ("freenode.net" "#emacs" "#clojure" "#clojurescript"))
+            erc-prompt-for-nickserv-password nil)))
+
   (spacemacs|use-package-add-hook popwin
     :post-config
     (progn
@@ -257,10 +270,10 @@ before layers configuration."
       (defun spacemacs/popwin-manage-window (&rest windows)
         "Adds window to `popwin:special-display-config' with default settings."
         (let ((settings '(:dedicated t
-                          :position bottom
-                          :stick t
-                          :noselect nil
-                          :height 0.4)))
+                                     :position bottom
+                                     :stick t
+                                     :noselect nil
+                                     :height 0.4)))
           (while windows
             (push (cons (pop windows) settings)
                   popwin:special-display-config))))

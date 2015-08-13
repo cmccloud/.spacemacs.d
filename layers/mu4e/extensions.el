@@ -22,41 +22,26 @@
       (global-set-key (kbd "C-c m") 'mu4e-compose-new))
     :config
     (progn
-
-      ;; mailbox shortcuts
-      (setq mu4e-maildir-shortcuts
-            '(("/INBOX" . ?i)))
-
       ;; custom tags header
+      (defun mu4e-prettify-tag (msg)
+        (->> (mu4e-message-field msg :tags)
+             (--map (cond ((s-equals? it "\\Important") "!!")
+                          ((s-equals? it "\\Inbox") "I")
+                          ((s-equals? it "\\Sent") "S")
+                          ((s-equals? it "\\Muted") "m")
+                          ((s-equals? it "\\Starred") "starred")
+                          (t it)))
+             (s-join ", ")))
+
       (add-to-list
        'mu4e-header-info-custom
-       '(:pretty-tags
-         .
-         (:name "Tags"
-                :shortname "Tags"
-                :help "Prettified Tags"
-                :function
-                (lambda (msg)
-                  (let ((tags (mu4e-message-field msg :tags)))
-                    (s-join
-                     ", "
-                     (-map (lambda (string)
-                             (cond
-                              ((s-equals? string "\\Important") "!!")
-                              ((s-equals? string "\\Inbox") "I")
-                              ((s-equals? string "\\Sent") "S")
-                              ((s-equals? string "\\Muted") "m")
-                              ((s-equals? string "\\Starred") "starred")
-                              (t string))) tags)))))))
+       '(:pretty-tags .
+                      (:name "Tags"
+                             :shortname "Tags"
+                             :help "Prettified Tags"
+                             :function #'mu4e-prettify-tag)))
 
-      ;; headers
-      (setq mu4e-headers-fields
-            '((:from . 22)
-              (:subject . 40)
-              (:human-date . 12)
-              (:flags . 6)))
-
-      ;; gmail:: archive and mark as read
+      ;; custom archive mark
       (add-to-list 'mu4e-marks
                    '(archive
                      :char "A"
@@ -67,7 +52,7 @@
                                (mu4e~proc-move docid nil "+S-u-N"))))
       (mu4e~headers-defun-mark-for archive)
 
-      ;; adding tags
+      ;; custom tag mark
       (add-to-list 'mu4e-marks
                    '(tag
                      :char "g"
@@ -78,7 +63,7 @@
                        (mu4e-action-retag-message msg (concat "+" target)))))
       (mu4e~headers-defun-mark-for tag)
 
-      ;; bookmarks
+      ;; define bookmarks
       (setq mu4e-bookmarks
             `((,(s-join " AND NOT "
                         '("flag:unread"
@@ -110,7 +95,14 @@
               ("tag:programming"
                "All by tag: Programming" ?P)))
 
-     ;; keybindings
+      ;; set headers
+      (setq mu4e-headers-fields
+            '((:from . 22)
+              (:subject . 40)
+              (:human-date . 12)
+              (:flags . 6)))
+
+      ;; set keybindings
       (evilify mu4e-main-mode mu4e-main-mode-map
                "j" 'mu4e~headers-jump-to-maildir)
       (evilify mu4e-headers-mode mu4e-headers-mode-map
@@ -123,11 +115,15 @@
                "J" 'mu4e-view-headers-next
                "K" 'mu4e-view-headers-prev)
 
-      ;; include signature
+      ;; set signature
       (setq mu4e-compose-signature
             (concat "Christopher McCloud\n"
                     "mccloud.christopher@gmail.com\n")
             mu4e-compose-signature-auto-include t)
+
+      ;; mailbox shortcuts
+      (setq mu4e-maildir-shortcuts
+            '(("/INBOX" . ?i)))
 
       (setq mu4e-get-mail-command "offlineimap -q"
             mu4e-attachment-dir "~/Downloads"
@@ -141,6 +137,9 @@
             mu4e-view-show-addresses t
             mu4e-sent-messages-behavior 'delete
             message-kill-buffer-on-exit t)
+
+      ;; dont ask for confirmation when killing an email
+      (setq message-kill-buffer-query nil)
 
       ;; maildirs
       (setq mu4e-maildir "~/.mail/gmail"

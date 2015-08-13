@@ -30,6 +30,8 @@
                                                inherit-input-method)
         "Helm completing read for mu4e with fuzzy matching."
         (helm-comp-read prompt collection
+                        :buffer "*helm-mu4e-completing-read*"
+                        :name "Mail Directories"
                         :initial-input initial-input
                         :must-match require-match
                         :sort predicate
