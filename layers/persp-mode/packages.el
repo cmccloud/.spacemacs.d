@@ -25,20 +25,23 @@
       (defun helm-perspectives ()
         "Selects or creates perspective."
         (interactive)
-        (helm :buffer "*Helm Perspectives*"
-              :sources `(,(helm-build-in-buffer-source "Perspectives"
-                            :data (persp-names-sorted)
-                            :fuzzy-match t
-                            :action '(("Switch to perspective" . persp-switch)))
-                         ,(helm-build-dummy-source "Create new perspective"
-                            :action '(("Create new perspective" . persp-switch)))))))))
+        (helm
+         :buffer "*Helm Perspectives*"
+         :sources `(,(helm-build-in-buffer-source "Perspectives"
+                       :data (persp-names-sorted)
+                       :fuzzy-match t
+                       :action
+                       '(("Switch to perspective" . persp-switch)))
+                    ,(helm-build-dummy-source "Create new perspective"
+                       :action
+                       '(("Create new perspective" . persp-switch)))))))))
 
 (defun persp-mode/init-persp-mode ()
   (use-package persp-mode
     :preface
     (progn
       (defvar persp-mode-autosave t
-        "If non-nil, saves perspectives to file every `persp-autosave-interval' seconds")
+        "If true, saves perspectives to file per `persp-autosave-interval'")
       (defvar persp-autosave-interval 900
         "Delay in seconds between `persp-autosave'.")
       (defvar persp-autosave-timer nil

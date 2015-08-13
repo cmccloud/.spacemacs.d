@@ -22,8 +22,9 @@
       (global-set-key (kbd "C-c m") 'mu4e-compose-new))
     :config
     (progn
-      ;; custom tags header
+      ;; prettyify gmail tags
       (defun mu4e-prettify-tag (msg)
+        "Shortens gmail built-in tags."
         (->> (mu4e-message-field msg :tags)
              (--map (cond ((s-equals? it "\\Important") "!!")
                           ((s-equals? it "\\Inbox") "I")
@@ -41,7 +42,7 @@
                              :help "Prettified Tags"
                              :function #'mu4e-prettify-tag)))
 
-      ;; custom archive mark
+      ;; gmail mark as archived
       (add-to-list 'mu4e-marks
                    '(archive
                      :char "A"
@@ -53,7 +54,19 @@
       (mu4e~headers-defun-mark-for archive)
       (mu4e~view-defun-mark-for archive)
 
-      ;; custom tag mark
+      ;; gmail mark as trash
+      (add-to-list 'mu4e-marks
+                   '(gmail-trash
+                     :char "t"
+                     :prompt "Gmail - Trash"
+                     :show-target (lambda (target) "gmail-trash")
+                     :action (lambda (docid msg target)
+                               (mu4e-action-retag-message msg "+\\Trash")
+                               (mu4e~proc-move docid nil "+S+T-u-N"))))
+      (mu4e~headers-defun-mark-for gmail-trash)
+      (mu4e~view-defun-mark-for gmail-trash)
+
+      ;; gmail mark with tag
       (add-to-list 'mu4e-marks
                    '(tag
                      :char "g"
@@ -63,6 +76,7 @@
                      (lambda (docid msg target)
                        (mu4e-action-retag-message msg (concat "+" target)))))
       (mu4e~headers-defun-mark-for tag)
+      (mu4e~view-defun-mark-for tag)
 
       ;; define bookmarks
       (setq mu4e-bookmarks
@@ -110,12 +124,14 @@
                "J" 'mu4e-headers-next
                "K" 'mu4e-headers-prev
                "a" 'mu4e-headers-action
+               "d" 'mu4e-headers-mark-for-gmail-trash
                "A" 'mu4e-headers-mark-for-archive
                "e" 'mu4e-headers-mark-for-tag)
       (evilify mu4e-view-mode mu4e-view-mode-map
                "J" 'mu4e-view-headers-next
                "K" 'mu4e-view-headers-prev
-               "A" 'mu4e-view-mark-for-archive)
+               "A" 'mu4e-view-mark-for-archive
+               "d" 'mu4e-view-mark-for-gmail-trash)
 
       ;; set signature
       (setq mu4e-compose-signature

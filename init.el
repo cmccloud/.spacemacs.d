@@ -277,13 +277,21 @@ before layers configuration."
       (evil-leader/set-key "aig" 'erc-gitter-connect)
       (evil-leader/set-key "aif" 'erc-freenode-connect)
       ;; TODO: mode-line channels
-      ;; TODO: storing passwords safely
       (setq erc-autojoin-channels-alist
             '(("1\\.0\\.0" "#syl20bnr/spacemacs" "#clojure-emacs/cider")
               ("freenode.net" "#emacs" "#clojure" "#clojurescript"
                "#lisp"))
-            erc-prompt-for-nickserv-password nil
-            erc-hide-list '("JOIN" "PART" "QUIT"))))
+            erc-foolish-content '("\\[Github\\].* starred"
+                                  "\\[Github\\].* forked"
+                                  "\\[Github\\].* synchronize a Pull Request"
+                                  "\\[Github\\].* labeled an issue in"
+                                  "\\[Github\\].* unlabeled an issue in")
+            erc-hide-list '("JOIN" "PART" "QUIT" "NICK" "MODE")
+            erc-track-exclude-types '("JOIN" "PART" "QUIT" "NICK" "MODE")
+            erc-track-exclude-server-buffer t
+            erc-track-position-in-mode-line t
+            erc-track-shorten-aggressively 'max
+            erc-prompt-for-nickserv-password nil)))
 
   (spacemacs|use-package-add-hook popwin
     :post-config
@@ -317,10 +325,11 @@ layers configuration."
         user-mail-address "mccloud.christopher@gmail.com")
 
   ;; something like the old space cadet keyboard
-  (setq mac-option-key-is-meta nil
-        mac-command-key-is-meta t
-        mac-command-modifier 'meta
-        mac-option-modifier 'super)
+  (when (system-is-mac)
+    (setq mac-option-key-is-meta nil
+          mac-command-key-is-meta t
+          mac-command-modifier 'meta
+          mac-option-modifier 'super))
 
   ;; misc settings
   (setq powerline-default-separator nil
