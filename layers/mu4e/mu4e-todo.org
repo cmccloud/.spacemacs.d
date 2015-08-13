@@ -1,6 +1,10 @@
 * TODO Folder Nametransforms
-* TODO Gmail Tag Integration
-* TODO Custom Bookmarks
+* DONE Gmail Tag Integration
+CLOSED: [2015-08-12 Wed 19:59]
+* DONE Custom Bookmarks
+CLOSED: [2015-08-12 Wed 19:59]
 * TODO Homescreen
-
+* TODO Tag Transformation filters
+- look to see if its possible to create more tag shortcuts similar to built
+in mu tags; ! -> /Important, $ -> Finance, lambda-symbol -> Programming, etc.
 

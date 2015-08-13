@@ -59,10 +59,15 @@
 
       ;; bookmarks
       (setq mu4e-bookmarks
-            '(("flag:unread AND maildir:/INBOX"
+            `((,(s-join " AND NOT "
+                        '("flag:unread"
+                          "tag:updates"
+                          "tag:social"
+                          "tag:promotions"
+                          "tag:forums"))
                "Inbox" ?n)
               ("flag:flagged"
-               "Flagged as Important" ?i)
+               "Flagged Messages" ?i)
               ("flag:unread AND tag:updates"
                "Updates" ?u)
               ("flag:unread AND tag:social"
@@ -71,18 +76,18 @@
                "Promotions" ?p)
               ("flag:unread AND tag:forums"
                "Forums" ?f)
+              ("flag:unread AND NOT flag:trashed"
+               "Unread Messages" ?a)
+              ("date:today..now AND NOT flag:trashed"
+               "Today's messages" ?t)
+              ("date:7d..now AND NOT flag:trashed"
+               "Week's Messages" ?l)
               ("tag:finance"
                "All by tag: Finance" ?F)
               ("tag:hr"
                "All by tag: Hack Reactor" ?H)
               ("tag:programming"
-               "All by tag: Programming" ?P)
-              ("date:7d..now AND NOT flag:trashed"
-               "Week's Messages" ?l)
-              ("date:today..now AND NOT flag:trashed"
-               "Today's messages" ?t)
-              ("flag:unread AND NOT flag:trashed"
-               "All Unread Messages" ?a)))
+               "All by tag: Programming" ?P)))
 
      ;; keybindings
       (evilify mu4e-main-mode mu4e-main-mode-map
@@ -112,7 +117,6 @@
             mu4e-view-prefer-html t
             mu4e-compose-dont-reply-to-self t
             mu4e-hide-index-messages t
-            mu4e-compose-complete-only-personal nil
             mu4e-html2text-command 'mu4e-shr2text
             mu4e-headers-skip-duplicates t
             mu4e-view-show-addresses t
