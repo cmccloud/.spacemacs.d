@@ -170,10 +170,14 @@ before layers configuration."
    ;; default value: "fd"
    evil-escape-key-sequence "df")
 
+  (defvar user-auth-file "~/.spacemacs.d/auth.el"
+    "Location of gitignored user-authentication file")
+
+  (when (file-exists-p user-auth-file)
+    (load user-auth-file))
   ;; ---------------------------------
   ;; Use Package Hooks
   ;; ---------------------------------
-
   (spacemacs|use-package-add-hook evil
     :post-config
     (progn
@@ -255,13 +259,31 @@ before layers configuration."
   (spacemacs|use-package-add-hook erc
     :post-config
     (progn
+      (defun erc-gitter-connect ()
+        "Quick connect to irc.gitter.im"
+        (interactive)
+        (erc-ssl :server "irc.gitter.im"
+                 :port 6667
+                 :nick "cmccloud"
+                 :password user-gitter-irc-password))
+
+      (defun erc-freenode-connect ()
+        "Quick connect to irc.freenode.net"
+        (interactive)
+        (erc :server "irc.freenode.net"
+             :port 6667
+             :nick "cmccloud"))
+
+      (evil-leader/set-key "aig" 'erc-gitter-connect)
+      (evil-leader/set-key "aif" 'erc-freenode-connect)
       ;; TODO: mode-line channels
       ;; TODO: storing passwords safely
       (setq erc-autojoin-channels-alist
-            '(("1\\.0\\.0" "#syl20bnr/spacemacs" "#clojure-emacs/cider"
-               "#magit/magit")
-              ("freenode.net" "#emacs" "#clojure" "#clojurescript"))
-            erc-prompt-for-nickserv-password nil)))
+            '(("1\\.0\\.0" "#syl20bnr/spacemacs" "#clojure-emacs/cider")
+              ("freenode.net" "#emacs" "#clojure" "#clojurescript"
+               "#lisp"))
+            erc-prompt-for-nickserv-password nil
+            erc-hide-list '("JOIN" "PART" "QUIT"))))
 
   (spacemacs|use-package-add-hook popwin
     :post-config

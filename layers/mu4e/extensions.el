@@ -51,6 +51,7 @@
                                (mu4e-action-retag-message msg "-\\Inbox")
                                (mu4e~proc-move docid nil "+S-u-N"))))
       (mu4e~headers-defun-mark-for archive)
+      (mu4e~view-defun-mark-for archive)
 
       ;; custom tag mark
       (add-to-list 'mu4e-marks
@@ -110,10 +111,11 @@
                "K" 'mu4e-headers-prev
                "a" 'mu4e-headers-action
                "A" 'mu4e-headers-mark-for-archive
-               "g" 'mu4e-headers-mark-for-tag)
+               "e" 'mu4e-headers-mark-for-tag)
       (evilify mu4e-view-mode mu4e-view-mode-map
                "J" 'mu4e-view-headers-next
-               "K" 'mu4e-view-headers-prev)
+               "K" 'mu4e-view-headers-prev
+               "A" 'mu4e-view-mark-for-archive)
 
       ;; set signature
       (setq mu4e-compose-signature
