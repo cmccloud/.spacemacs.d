@@ -23,13 +23,6 @@
     :config
     (progn
       (require 'mu4e-contrib)
-      ;; keybindings
-      (evilify mu4e-main-mode mu4e-main-mode-map
-               "j" 'mu4e~headers-jump-to-maildir)
-      (evilify mu4e-headers-mode mu4e-headers-mode-map)
-      (evilify mu4e-view-mode mu4e-view-mode-map
-               "J" 'mu4e-view-headers-next
-               "K" 'mu4e-view-headers-prev)
 
       ;; mailbox shortcuts
       (setq mu4e-maildir-shortcuts
@@ -38,22 +31,71 @@
       ;; headers
       (setq mu4e-headers-fields
             '((:human-date . 12)
+              (:tags . 20)
               (:flags . 6)
               (:from . 22)
               (:subject)))
 
+      ;; gmail:: archive and mark as read
+      (add-to-list 'mu4e-marks
+                   '(archive
+                     :char "A"
+                     :prompt "Archive"
+                     :show-target (lambda (target) "archive")
+                     :action (lambda (docid msg target)
+                               (mu4e-action-retag-message msg "-\\Inbox")
+                               (mu4e~proc-move docid nil "+S-u-N"))))
+      (mu4e~headers-defun-mark-for archive)
+
+      ;; adding tags
+      (add-to-list 'mu4e-marks
+                   '(tag
+                     :char "g"
+                     :prompt "gtag"
+                     :ask-target (lambda () (read-string "Tag Name: "))
+                     :action (lambda (docid msg target)
+                               (mu4e-action-retag-message msg (concat "+" target)))))
+      (mu4e~headers-defun-mark-for tag)
+
       ;; bookmarks
       (setq mu4e-bookmarks
-            '(("flag:flagged AND NOT flag:trashed"
-               "Flagged Messages" ?f)
-              ("flag:unread AND date:7d..now AND NOT flag:trashed"
-               "Latest Unread Messages" ?u)
+            '(("flag:unread AND maildir:/INBOX"
+               "Inbox" ?n)
+              ("flag:flagged"
+               "Flagged as Important" ?i)
+              ("flag:unread AND tag:updates"
+               "Updates" ?u)
+              ("flag:unread AND tag:social"
+               "Social" ?s)
+              ("flag:unread AND tag:promotions"
+               "Promotions" ?p)
+              ("flag:unread AND tag:forums"
+               "Forums" ?f)
+              ("tag:finance"
+               "All by tag: Finance" ?F)
+              ("tag:hr"
+               "All by tag: Hack Reactor" ?H)
+              ("tag:programming"
+               "All by tag: Programming" ?P)
               ("date:7d..now AND NOT flag:trashed"
-               "Latest Messages" ?l)
-              ("flag:unread AND NOT flag:trashed"
-               "All Unread Messages" ?a)
+               "Week's Messages" ?l)
               ("date:today..now AND NOT flag:trashed"
-               "Today's messages" ?t)))
+               "Today's messages" ?t)
+              ("flag:unread AND NOT flag:trashed"
+               "All Unread Messages" ?a)))
+
+     ;; keybindings
+      (evilify mu4e-main-mode mu4e-main-mode-map
+               "j" 'mu4e~headers-jump-to-maildir)
+      (evilify mu4e-headers-mode mu4e-headers-mode-map
+               "J" 'mu4e-headers-next
+               "K" 'mu4e-headers-prev
+               "a" 'mu4e-headers-action
+               "A" 'mu4e-headers-mark-for-archive
+               "g" 'mu4e-headers-mark-for-tag)
+      (evilify mu4e-view-mode mu4e-view-mode-map
+               "J" 'mu4e-view-headers-next
+               "K" 'mu4e-view-headers-prev)
 
       ;; include signature
       (setq mu4e-compose-signature
