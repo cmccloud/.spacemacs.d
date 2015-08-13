@@ -10,7 +10,7 @@
 ;;
 ;;; License: GPLv3
 
-(setq mu4e-post-extensions '(mu4e))
+(setq mu4e-post-extensions '(mu4e mu4e-contrib))
 
 (defun mu4e/init-mu4e ()
   (use-package mu4e
@@ -22,7 +22,6 @@
       (global-set-key (kbd "C-c m") 'mu4e-compose-new))
     :config
     (progn
-      (require 'mu4e-contrib)
 
       ;; mailbox shortcuts
       (setq mu4e-maildir-shortcuts
@@ -52,11 +51,10 @@
 
       ;; headers
       (setq mu4e-headers-fields
-            '((:human-date . 12)
-              (:pretty-tags . 24)
-              (:flags . 6)
-              (:from . 22)
-              (:subject)))
+            '((:from . 22)
+              (:subject . 40)
+              (:human-date . 12)
+              (:flags . 6)))
 
       ;; gmail:: archive and mark as read
       (add-to-list 'mu4e-marks
@@ -135,12 +133,10 @@
             mu4e-attachment-dir "~/Downloads"
             mu4e-update-interval 300
             mu4e-confirm-quit nil
-            mu4e-completing-read-function 'helm--completing-read-default
             mu4e-view-show-images t
             mu4e-view-prefer-html t
             mu4e-compose-dont-reply-to-self t
             mu4e-hide-index-messages t
-            mu4e-html2text-command 'mu4e-shr2text
             mu4e-headers-skip-duplicates t
             mu4e-view-show-addresses t
             mu4e-sent-messages-behavior 'delete
@@ -158,3 +154,10 @@
             smtpmail-default-smtp-server "smtp.gmail.com"
             smtpmail-smtp-server "smtp.gmail.com"
             smtpmail-smtp-service 587))))
+
+(defun mu4e/init-mu4e-contrib ()
+  (use-package mu4e-contrib
+    :load-path "/usr/local/share/emacs/site-lisp/mu4e"
+    :config
+    (progn
+      (setq mu4e-html2text-command 'mu4e-shr2text))))
