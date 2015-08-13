@@ -28,10 +28,32 @@
       (setq mu4e-maildir-shortcuts
             '(("/INBOX" . ?i)))
 
+      ;; custom tags header
+      (add-to-list
+       'mu4e-header-info-custom
+       '(:pretty-tags
+         .
+         (:name "Tags"
+                :shortname "Tags"
+                :help "Prettified Tags"
+                :function
+                (lambda (msg)
+                  (let ((tags (mu4e-message-field msg :tags)))
+                    (s-join
+                     ", "
+                     (-map (lambda (string)
+                             (cond
+                              ((s-equals? string "\\Important") "!!")
+                              ((s-equals? string "\\Inbox") "I")
+                              ((s-equals? string "\\Sent") "S")
+                              ((s-equals? string "\\Muted") "m")
+                              ((s-equals? string "\\Starred") "starred")
+                              (t string))) tags)))))))
+
       ;; headers
       (setq mu4e-headers-fields
             '((:human-date . 12)
-              (:tags . 20)
+              (:pretty-tags . 24)
               (:flags . 6)
               (:from . 22)
               (:subject)))
@@ -53,8 +75,9 @@
                      :char "g"
                      :prompt "gtag"
                      :ask-target (lambda () (read-string "Tag Name: "))
-                     :action (lambda (docid msg target)
-                               (mu4e-action-retag-message msg (concat "+" target)))))
+                     :action
+                     (lambda (docid msg target)
+                       (mu4e-action-retag-message msg (concat "+" target)))))
       (mu4e~headers-defun-mark-for tag)
 
       ;; bookmarks
