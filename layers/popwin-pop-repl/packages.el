@@ -29,7 +29,7 @@
 
       ;; generic command
       (defun popwin-pop-repl ()
-        "Uses the current major mode to call for a REPL using `popwin--pop-repl-table'."
+        "Calls for major-mode repl using `popwin--pop-repl-table'."
         (interactive)
         (funcall (gethash major-mode popwin--pop-repl-table (lambda ()))))
 
@@ -41,7 +41,8 @@
               (progn
                 (popwin:close-popup-window t)
                 ;; only if popwin failed
-                (-when-let (retry (get-buffer-window "*cider-repl localhost*" t))
+                (-when-let (retry
+                            (get-buffer-window "*cider-repl localhost*" t))
                   (delete-window retry)))
             (popwin:popup-buffer
              "*cider-repl localhost*"
@@ -54,9 +55,15 @@
 
       ;; ielm repl
       (defun popwin--pop-ielm-repl ()
-        "Displays as a popup window ielm instance. Uses existing buffer if found."
+        "Displays ielm popup buffer. Uses existing buffer if found."
         (let ((instance (get-buffer "*ielm*"))
-              (options '("*ielm*" :position bottom :height .4 :stick t :tail t :noselect nil :dedicated t))
+              (options '("*ielm*"
+                         :position bottom
+                         :height .4
+                         :stick t
+                         :tail t
+                         :noselect nil
+                         :dedicated t))
               (buf (current-buffer)))
           (cond ((null instance)
                  (ielm)
@@ -70,7 +77,11 @@
                 (t (apply 'popwin:popup-buffer options)))))
 
       ;; Associations
-      (puthash 'inferior-emacs-lisp-mode #'popwin--pop-ielm-repl popwin--pop-repl-table)
-      (puthash 'emacs-lisp-mode #'popwin--pop-ielm-repl popwin--pop-repl-table)
-      (puthash 'clojure-mode #'popwin--pop-cider-repl popwin--pop-repl-table)
-      (puthash 'cider-repl-mode #'popwin--pop-cider-repl popwin--pop-repl-table))))
+      (puthash 'inferior-emacs-lisp-mode
+               #'popwin--pop-ielm-repl popwin--pop-repl-table)
+      (puthash 'emacs-lisp-mode
+               #'popwin--pop-ielm-repl popwin--pop-repl-table)
+      (puthash 'clojure-mode
+               #'popwin--pop-cider-repl popwin--pop-repl-table)
+      (puthash 'cider-repl-mode
+               #'popwin--pop-cider-repl popwin--pop-repl-table))))
