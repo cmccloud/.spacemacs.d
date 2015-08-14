@@ -278,15 +278,8 @@ before layers configuration."
       (evil-leader/set-key "aif" 'erc-freenode-connect)
       ;; TODO: mode-line channels
       (setq erc-autojoin-channels-alist
-            '(("1\\.0\\.0" "#syl20bnr/spacemacs" "#clojure-emacs/cider")
-              ("freenode.net" "#emacs" "#clojure" "#clojurescript"
-               "#lisp"))
-            erc-foolish-content '("\[Github\].* starred"
-                                  "\[Github\].* forked"
-                                  "\[Github\].* commented"
-                                  "\[Github\].* synchronize a Pull Request"
-                                  "\[Github\].* labeled an issue in"
-                                  "\[Github\].* unlabeled an issue in")
+            '(("1\\.0\\.0" "#syl20bnr/spacemacs")
+              ("freenode.net" "#emacs"))
             erc-hide-list '("JOIN" "PART" "QUIT" "NICK" "MODE")
             erc-track-exclude-types '("JOIN" "PART" "QUIT" "NICK" "MODE")
             erc-track-exclude-server-buffer t

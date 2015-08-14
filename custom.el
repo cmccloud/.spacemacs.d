@@ -23,7 +23,7 @@
  '(erc-button-mode t)
  '(erc-fill-mode t)
  '(erc-hl-nicks-mode t)
- '(erc-ignore-list (quote ("gitter")))
+ '(erc-ignore-list nil)
  '(erc-irccontrols-mode t)
  '(erc-kill-buffer-on-part t)
  '(erc-kill-queries-on-quit t)
