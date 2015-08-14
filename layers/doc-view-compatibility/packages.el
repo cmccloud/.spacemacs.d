@@ -21,9 +21,6 @@
       ace-jump-mode
       ))
 
-;; List of packages to exclude.
-(setq doc-view-compatibility-excluded-packages '())
-
 (defun doc-view-compatibility/pre-init-doc-view ()
   (spacemacs|use-package-add-hook doc-view
     :pre-init
@@ -37,7 +34,7 @@ doc-view mode's default behavior is to pop to the first page. This function
 introduces a fix for that behavior by saving the current page property
 from the winprops-alist as a buffer local variable.
 
-Also see `doc-view/pdf-view-restore-current-page-from-buffer'."
+Also see `doc-view/doc-view-restore-current-page-from-buffer'."
         (cl-loop for win in (window-list)
                  when (eql 'doc-view-mode
                            (buffer-local-value 'major-mode (window-buffer win)))
@@ -53,9 +50,9 @@ doc-view mode's default behavior is to pop to the first page. This function
 introduces a fix for that behavior by saving the current page property
 from the winprops-alist as a buffer local variable.
 
-Also see `doc-view/pdf-view-save-current-page-to-buffer'."
+Also see `doc-view/doc-view-save-current-page-to-buffer'."
         (cl-loop for win in (window-list)
-                 when (eql 'doc-viewmode
+                 when (eql 'doc-view-mode
                            (buffer-local-value 'major-mode (window-buffer win)))
                  do (with-selected-window win
                       (doc-view-goto-page doc-view-last-visited-page)))))))
