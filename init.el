@@ -33,6 +33,8 @@
      markdown
      ;; my configuration layers
      lispy
+     doc-view-compatibility
+     edebug
      persp-mode
      popwin-pop-repl
      mu4e)
