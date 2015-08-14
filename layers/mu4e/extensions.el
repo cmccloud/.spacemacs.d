@@ -133,13 +133,13 @@
         (kbd "A") 'mu4e-headers-mark-for-archive
         (kbd "e") 'mu4e-headers-mark-for-tag)
 
-      (spacemacs|evilify-map  mu4e-view-mode-map
+      (spacemacs|evilify-map mu4e-view-mode-map
         :mode mu4e-view-mode
         :bindings
         (kbd "J") 'mu4e-view-headers-next
         (kbd "K") 'mu4e-view-headers-prev
         (kbd "A") 'mu4e-view-mark-for-archive
-        (kbd "a") 'mu4e-view-mark-for-gmail-trash)
+        (kbd "d") 'mu4e-view-mark-for-gmail-trash)
 
       ;; set signature
       (setq mu4e-compose-signature

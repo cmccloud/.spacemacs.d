@@ -259,6 +259,14 @@ before layers configuration."
   (spacemacs|use-package-add-hook erc
     :post-config
     (progn
+      (defun erc-slack-connect ()
+        "Quick connect to hrx slack."
+        (interactive)
+        (erc-ssl :server "hackreactorx.irc.slack.com"
+                 :port 6697
+                 :nick "mccloud.christopher"
+                 :password user-slack-irc-password))
+
       (defun erc-gitter-connect ()
         "Quick connect to irc.gitter.im"
         (interactive)
@@ -276,14 +284,18 @@ before layers configuration."
 
       (evil-leader/set-key "aig" 'erc-gitter-connect)
       (evil-leader/set-key "aif" 'erc-freenode-connect)
+      (evil-leader/set-key "ais" 'erc-slack-connect)
       ;; TODO: mode-line channels
+      ;; TODO: better log integration
       (setq erc-autojoin-channels-alist
             '(("1\\.0\\.0" "#syl20bnr/spacemacs")
               ("freenode.net" "#emacs"))
-            erc-hide-list '("JOIN" "PART" "QUIT" "NICK" "MODE")
-            erc-track-exclude-types '("JOIN" "PART" "QUIT" "NICK" "MODE")
+            erc-hide-list '("JOIN" "PART" "QUIT" "NICK" "MODE" "353")
+            erc-track-exclude-types '("JOIN" "PART" "QUIT" "NICK" "MODE" "353")
             erc-track-exclude-server-buffer t
             erc-track-position-in-mode-line t
+            erc-current-nick-highlight-type 'all
+            erc-log-insert-log-on-open nil
             erc-track-shorten-aggressively 'max
             erc-prompt-for-nickserv-password nil)))
 
@@ -320,6 +332,7 @@ layers configuration."
 
   ;; introductions are in order...
   (setq user-full-name "Christopher McCloud"
+        user-login-name "cmccloud"
         user-mail-address "mccloud.christopher@gmail.com")
 
   ;; something like the old space cadet keyboard
