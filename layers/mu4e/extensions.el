@@ -118,20 +118,28 @@
               (:flags . 6)))
 
       ;; set keybindings
-      (evilify mu4e-main-mode mu4e-main-mode-map
-               "j" 'mu4e~headers-jump-to-maildir)
-      (evilify mu4e-headers-mode mu4e-headers-mode-map
-               "J" 'mu4e-headers-next
-               "K" 'mu4e-headers-prev
-               "a" 'mu4e-headers-action
-               "d" 'mu4e-headers-mark-for-gmail-trash
-               "A" 'mu4e-headers-mark-for-archive
-               "e" 'mu4e-headers-mark-for-tag)
-      (evilify mu4e-view-mode mu4e-view-mode-map
-               "J" 'mu4e-view-headers-next
-               "K" 'mu4e-view-headers-prev
-               "A" 'mu4e-view-mark-for-archive
-               "d" 'mu4e-view-mark-for-gmail-trash)
+      (spacemacs|evilify-map mu4e-main-mode-map
+        :mode mu4e-main-mode
+        :bindings
+        (kbd "j") 'mu4e~headers-jump-to-maildir)
+
+      (spacemacs|evilify-map mu4e-headers-mode-map
+        :mode mu4e-headers-mode
+        :bindings
+        (kbd "J") 'mu4e-headers-next
+        (kbd "K") 'mu4e-headers-prev
+        (kbd "a") 'mu4e-headers-action
+        (kbd "d") 'mu4e-headers-mark-for-gmail-trash
+        (kbd "A") 'mu4e-headers-mark-for-archive
+        (kbd "e") 'mu4e-headers-mark-for-tag)
+
+      (spacemacs|evilify-map  mu4e-view-mode-map
+        :mode mu4e-view-mode
+        :bindings
+        (kbd "J") 'mu4e-view-headers-next
+        (kbd "K") 'mu4e-view-headers-prev
+        (kbd "A") 'mu4e-view-mark-for-archive
+        (kbd "a") 'mu4e-view-mark-for-gmail-trash)
 
       ;; set signature
       (setq mu4e-compose-signature

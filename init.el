@@ -281,11 +281,12 @@ before layers configuration."
             '(("1\\.0\\.0" "#syl20bnr/spacemacs" "#clojure-emacs/cider")
               ("freenode.net" "#emacs" "#clojure" "#clojurescript"
                "#lisp"))
-            erc-foolish-content '("\\[Github\\].* starred"
-                                  "\\[Github\\].* forked"
-                                  "\\[Github\\].* synchronize a Pull Request"
-                                  "\\[Github\\].* labeled an issue in"
-                                  "\\[Github\\].* unlabeled an issue in")
+            erc-foolish-content '("\[Github\].* starred"
+                                  "\[Github\].* forked"
+                                  "\[Github\].* commented"
+                                  "\[Github\].* synchronize a Pull Request"
+                                  "\[Github\].* labeled an issue in"
+                                  "\[Github\].* unlabeled an issue in")
             erc-hide-list '("JOIN" "PART" "QUIT" "NICK" "MODE")
             erc-track-exclude-types '("JOIN" "PART" "QUIT" "NICK" "MODE")
             erc-track-exclude-server-buffer t
@@ -320,6 +321,10 @@ before layers configuration."
  This function is called at the very end of Spacemacs initialization after
 layers configuration."
 
+  ;; load custom file
+  (setq custom-file "~/.spacemacs.d/custom.el")
+  (load custom-file)
+
   ;; introductions are in order...
   (setq user-full-name "Christopher McCloud"
         user-mail-address "mccloud.christopher@gmail.com")
@@ -336,6 +341,7 @@ layers configuration."
         avy-all-windows nil
         avy-background t
         doc-view-continuous t
+        sp-show-pair-from-inside t      ; accounts for evil
         lispy-no-permanent-semantic t
         paradox-github-token t
         even-window-heights nil
@@ -356,8 +362,3 @@ layers configuration."
   (setq max-lisp-eval-depth 30000)
   (setq max-specpdl-size 30000)
   (setq large-file-warning-threshold 25000000))
-
-;; Do not write anything past this comment. This is where Emacs will
-;; auto-generate custom variable definitions.
-(setq custom-file "~/.spacemacs.d/custom.el")
-(load custom-file)
