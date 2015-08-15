@@ -12,11 +12,12 @@
 
 ;; List of all packages to install and/or initialize. Built-in packages
 ;; which require an initialization must be listed explicitly in the list.
+
 (setq mu4e-packages
       '(
         helm
-        (mu4e :location local :step post)
-        (mu4e-contrib :location local :step post)
+        (mu4e :location local)
+        (mu4e-contrib :location local)
         ))
 
 (defun mu4e/init-mu4e ()
