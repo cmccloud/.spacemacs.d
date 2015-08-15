@@ -307,14 +307,11 @@ before layers configuration."
       ;; additional popwin managed windows
       (defun spacemacs/popwin-manage-window (&rest windows)
         "Adds window to `popwin:special-display-config' with default settings."
-        (let ((settings '(:dedicated t
-                                     :position bottom
-                                     :stick t
-                                     :noselect nil
-                                     :height 0.4)))
-          (while windows
-            (push (cons (pop windows) settings)
-                  popwin:special-display-config))))
+        (while windows
+          (push (cons (pop windows)
+                      '(:dedicated t :position bottom :stick t
+                        :noselect nil :height 0.4))
+                popwin:special-display-config)))
 
       (spacemacs/popwin-manage-window
        "*Compile-Log*"
@@ -355,6 +352,7 @@ layers configuration."
         even-window-heights nil
         smooth-scroll-margin 4          ; helps scroll lag for now
         cider-ovelays-use-font-lock t   ; misspelled
+        cider-required-nrepl-version "0.2.6" ; suppress warning message
         markdown-open-command "marked")
 
   ;; default toggles
