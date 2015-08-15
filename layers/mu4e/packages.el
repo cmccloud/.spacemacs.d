@@ -14,11 +14,9 @@
 ;; which require an initialization must be listed explicitly in the list.
 
 (setq mu4e-packages
-      '(
-        helm
+      '(helm
         (mu4e :location local)
-        (mu4e-contrib :location local)
-        ))
+        (mu4e-contrib :location local)))
 
 (defun mu4e/init-mu4e ()
   (use-package mu4e

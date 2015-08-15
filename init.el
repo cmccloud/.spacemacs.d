@@ -21,6 +21,7 @@
             shell-default-position 'bottom
             shell-default-shell 'eshell)
      syntax-checking
+     spell-checking
      erc
      org
      git
@@ -201,6 +202,7 @@ before layers configuration."
       (define-key evil-insert-state-map (kbd "C-;") 'iedit-mode)
 
       ;; user reserved key-bindings
+      (evil-leader/set-key "od" 'dired-jump)
       (evil-leader/set-key "or" 'popwin-pop-repl)
       (evil-leader/set-key "ov" 'set-variable)
 
@@ -310,7 +312,7 @@ before layers configuration."
         (while windows
           (push (cons (pop windows)
                       '(:dedicated t :position bottom :stick t
-                        :noselect nil :height 0.4))
+                                   :noselect nil :height 0.4))
                 popwin:special-display-config)))
 
       (spacemacs/popwin-manage-window
@@ -334,12 +336,20 @@ layers configuration."
         user-login-name "cmccloud"
         user-mail-address "mccloud.christopher@gmail.com")
 
+  ;; osx config
   ;; something like the old space cadet keyboard
-  (when (system-is-mac)
+  (when (eq system-type 'darwin)
     (setq mac-option-key-is-meta nil
           mac-command-key-is-meta t
           mac-command-modifier 'meta
-          mac-option-modifier 'super))
+          mac-option-modifier 'super)
+    ;; have we installed coreutils?
+    (if (executable-find "gls")
+        (progn
+          (setq insert-directory-program "gls")
+          (setq dired-listing-switches "-al --group-directories-first"))
+      (setq dired-listing-switches "-al")))
+
 
   ;; misc settings
   (setq powerline-default-separator nil
@@ -350,8 +360,8 @@ layers configuration."
         lispy-no-permanent-semantic t
         paradox-github-token t
         even-window-heights nil
-        smooth-scroll-margin 4          ; helps scroll lag for now
-        cider-ovelays-use-font-lock t   ; misspelled
+        smooth-scroll-margin 4               ; helps scroll lag for now
+        cider-ovelays-use-font-lock t        ; misspelled
         cider-required-nrepl-version "0.2.6" ; suppress warning message
         markdown-open-command "marked")
 
