@@ -360,6 +360,7 @@ layers configuration."
         lispy-no-permanent-semantic t
         paradox-github-token t
         even-window-heights nil
+        flycheck-highlighting-mode nil
         smooth-scroll-margin 4               ; helps scroll lag for now
         cider-ovelays-use-font-lock t        ; misspelled
         cider-required-nrepl-version "0.2.6" ; suppress warning message
