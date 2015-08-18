@@ -30,7 +30,7 @@
     (progn
       ;; custom update timer
       (defvar mu4e-update-timer nil
-        "Stores mu4e update timer")
+        "Stores mu4e update timer.")
 
       ;; prettyify gmail tags
       (defun mu4e-prettify-tag (msg)
@@ -164,7 +164,7 @@
       (setq mu4e-get-mail-command "offlineimap -q"
             mu4e-attachment-dir "~/Downloads"
             ;; mu4e update interval relies on mu4e running. Instead use a
-            ;; manual timer to run in background every 5 minutes.
+            ;; manual timer running in background every 5 minutes.
             mu4e-update-interval nil
             mu4e-update-timer (run-with-timer
                                300 300

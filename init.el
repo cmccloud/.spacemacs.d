@@ -298,6 +298,8 @@ before layers configuration."
             erc-track-exclude-types '("JOIN" "PART" "QUIT" "NICK" "MODE" "353")
             erc-track-exclude-server-buffer t
             erc-track-position-in-mode-line t
+            erc-hl-nicks-minimum-contrast-ratio 3.5
+            erc-hl-nicks-color-contrast-strategy '(invert contrast)
             erc-current-nick-highlight-type 'all
             erc-log-insert-log-on-open nil
             erc-track-shorten-aggressively 'max
@@ -355,7 +357,6 @@ layers configuration."
           (setq insert-directory-program "gls")
           (setq dired-listing-switches "-al --group-directories-first"))
       (setq dired-listing-switches "-al")))
-
 
   ;; misc settings
   (setq powerline-default-separator nil

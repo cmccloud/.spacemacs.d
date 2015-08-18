@@ -71,12 +71,21 @@ Also see `doc-view/doc-view-save-current-page-to-buffer'."
   (spacemacs|use-package-add-hook persp-mode
     :post-config
     (progn
-      (advice-add 'persp-switch
-                  :before
-                  #'doc-view/doc-view-save-current-page-to-buffer)
-      (advice-add 'persp-switch
-                  :after
-                  #'doc-view/doc-view-restore-current-page-from-buffer))))
+      ;; check for which version of the advice api to use
+      (if (version< emacs-version "24.4")
+          (progn
+            (defadvice persp-switch
+                (before doc-view/doc-view-save-current-page-to-buffer activate)
+              (funcall #'doc-view/doc-view-save-current-page-to-buffer))
+            (defadvice persp-switch
+                (after doc-view/doc-view-restore-current-page-from-buffer activate)
+              (funcall #'doc-view/doc-view-restore-current-page-from-buffer)))
+        (advice-add 'persp-switch
+                    :before
+                    #'doc-view/doc-view-save-current-page-to-buffer)
+        (advice-add 'persp-switch
+                    :after
+                    #'doc-view/doc-view-restore-current-page-from-buffer)))))
 
 (defun doc-view-compatibility/pre-init-eyebrowse ()
   "Adds doc-view page saving/restoration support to eyebrowse."
