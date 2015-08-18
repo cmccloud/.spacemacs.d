@@ -13,13 +13,11 @@
 ;; List of all packages to install and/or initialize. Built-in packages
 ;; which require an initialization must be listed explicitly in the list.
 (setq doc-view-compatibility-packages
-    '(
-      doc-view
-      popwin
-      eyebrowse
-      persp-mode
-      ace-jump-mode
-      ))
+      '(doc-view
+        popwin
+        eyebrowse
+        persp-mode
+        ace-jump-mode))
 
 (defun doc-view-compatibility/pre-init-doc-view ()
   (spacemacs|use-package-add-hook doc-view
@@ -47,7 +45,7 @@ Doc-view Mode uses image-mode-winprops to track state. Other packages,
 particularly those involving window management, sometimes delete windows
 automatically. On restoration, the associated window-props are gone, and
 doc-view mode's default behavior is to pop to the first page. This function
-introduces a fix for that behavior by saving the current page property
+introduces a fix for that behavior by restoring the current page property
 from the winprops-alist as a buffer local variable.
 
 Also see `doc-view/doc-view-save-current-page-to-buffer'."

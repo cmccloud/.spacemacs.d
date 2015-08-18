@@ -44,11 +44,9 @@
    ;; packages then consider to create a layer, you can also put the
    ;; configuration in `dotspacemacs/config'.
    dotspacemacs-additional-packages
-   '(
-     material-theme
+   '(material-theme
      color-theme-sanityinc-tomorrow
-     base16-theme
-     )
+     base16-theme)
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '()
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
@@ -286,9 +284,11 @@ before layers configuration."
              :port 6667
              :nick "cmccloud"))
 
-      (evil-leader/set-key "aig" 'erc-gitter-connect)
-      (evil-leader/set-key "aif" 'erc-freenode-connect)
-      (evil-leader/set-key "ais" 'erc-slack-connect)
+      (evil-leader/set-key
+        "aig" 'erc-gitter-connect
+        "aif" 'erc-freenode-connect
+        "ais" 'erc-slack-connect)
+
       ;; TODO: mode-line channels
       ;; TODO: better log integration
       (setq erc-autojoin-channels-alist
@@ -301,7 +301,13 @@ before layers configuration."
             erc-current-nick-highlight-type 'all
             erc-log-insert-log-on-open nil
             erc-track-shorten-aggressively 'max
-            erc-prompt-for-nickserv-password nil)))
+            erc-prompt-for-nickserv-password nil)
+
+      ;; osx doesn't have dbus support
+      (when (eq system-type 'darwin)
+        (remove-hook 'erc-text-matched-hook 'erc-global-notify))
+      ;; we dont need paren highlighting either
+      (add-hook 'erc-mode-hook 'turn-off-show-smartparens-mode)))
 
   (spacemacs|use-package-add-hook popwin
     :post-config

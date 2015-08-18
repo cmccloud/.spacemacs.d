@@ -3,7 +3,7 @@
 ;; Copyright (c) 2012-2014 Sylvain Benner
 ;; Copyright (c) 2014-2015 Sylvain Benner & Contributors
 ;;
-;; Author: Sylvain Benner <sylvain.benner@gmail.com>
+;; Author: Christopher McCloud <mccloud.christopher@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
 ;;
 ;; This file is not part of GNU Emacs.
@@ -12,13 +12,7 @@
 
 ;; List of all packages to install and/or initialize. Built-in packages
 ;; which require an initialization must be listed explicitly in the list.
-(setq popwin-pop-repl-packages
-    '(
-      popwin
-      ))
-
-;; List of packages to exclude.
-(setq popwin-pop-repl-excluded-packages '())
+(setq popwin-pop-repl-packages '(popwin))
 
 (defun popwin-pop-repl/pre-init-popwin ()
   (spacemacs|use-package-add-hook popwin

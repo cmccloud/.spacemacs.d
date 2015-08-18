@@ -28,6 +28,10 @@
       (global-set-key (kbd "C-c m") 'mu4e-compose-new))
     :config
     (progn
+      ;; custom update timer
+      (defvar mu4e-update-timer nil
+        "Stores mu4e update timer")
+
       ;; prettyify gmail tags
       (defun mu4e-prettify-tag (msg)
         "Shortens gmail built-in tags."
@@ -42,11 +46,11 @@
 
       (add-to-list
        'mu4e-header-info-custom
-       '(:pretty-tags .
-                      (:name "Tags"
-                             :shortname "Tags"
-                             :help "Prettified Tags"
-                             :function #'mu4e-prettify-tag)))
+       (quote (:pretty-tags .
+                            (:name "Tags"
+                                   :shortname "Tags"
+                                   :help "Prettified Tags"
+                                   :function #'mu4e-prettify-tag))))
 
       ;; gmail mark as archived
       (add-to-list 'mu4e-marks
@@ -159,7 +163,12 @@
 
       (setq mu4e-get-mail-command "offlineimap -q"
             mu4e-attachment-dir "~/Downloads"
-            mu4e-update-interval 300
+            ;; mu4e update interval relies on mu4e running. Instead use a
+            ;; manual timer to run in background every 5 minutes.
+            mu4e-update-interval nil
+            mu4e-update-timer (run-with-timer
+                               300 300
+                               (lambda () (mu4e-update-mail-and-index t)))
             mu4e-confirm-quit nil
             mu4e-view-show-images t
             mu4e-view-prefer-html t
