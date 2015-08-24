@@ -290,7 +290,6 @@ before layers configuration."
         "ais" 'erc-slack-connect)
 
       ;; TODO: mode-line channels
-      ;; TODO: better log integration
       (setq erc-autojoin-channels-alist
             '(("1\\.0\\.0" "#syl20bnr/spacemacs")
               ("freenode.net" "#emacs"))
@@ -298,6 +297,8 @@ before layers configuration."
             erc-track-exclude-types '("JOIN" "PART" "QUIT" "NICK" "MODE" "353")
             erc-track-exclude-server-buffer t
             erc-track-position-in-mode-line t
+            erc-join-buffer 'bury
+            erc-image-inline-rescale 'window
             erc-hl-nicks-minimum-contrast-ratio 3.5
             erc-hl-nicks-color-contrast-strategy '(invert contrast)
             erc-current-nick-highlight-type 'all
@@ -376,6 +377,7 @@ layers configuration."
   ;; default toggles
   (semantic-mode)
   (spacemacs/toggle-vi-tilde-fringe-off)
+  (fringe-mode 4)
 
   ;; build file cache
   (file-cache-add-directory-list

@@ -15,9 +15,6 @@
 (setq persp-mode-packages '(persp-mode
                             helm))
 
-;; List of packages to exclude.
-(setq persp-mode-excluded-packages '())
-
 (defun persp-mode/pre-init-helm ()
   (spacemacs|use-package-add-hook helm
     :post-config
@@ -27,7 +24,9 @@
         (interactive)
         (helm
          :buffer "*Helm Perspectives*"
-         :sources `(,(helm-build-in-buffer-source "Perspectives"
+         :sources `(,(helm-build-in-buffer-source
+                         (s-concat "Current Perspective: "
+                                   (safe-persp-name (get-frame-persp)))
                        :data (persp-names-sorted)
                        :fuzzy-match t
                        :action
@@ -38,6 +37,7 @@
 
 (defun persp-mode/init-persp-mode ()
   (use-package persp-mode
+    :diminish persp-mode
     :preface
     (progn
       (defvar persp-mode-autosave t
@@ -61,7 +61,19 @@ Cancels autosave on exiting perspectives mode."
                      (persp-save-state-to-file))))
           (when persp-autosave-timer
             (cancel-timer persp-autosave-timer)
-            (setq persp-autosave-timer nil)))))
+            (setq persp-autosave-timer nil))))
+      (defun spacemacs/persp-number ()
+        "Returns index of current perspective in `PERSP-NAMES-SORTED'."
+        (let ((persp-num (-elem-index (safe-persp-name (get-frame-persp))
+                                      (persp-names-sorted))))
+          (cond ((= 0 persp-num) "⓪")
+                ((= 1 persp-num) "①")
+                ((= 2 persp-num) "②")
+                ((= 3 persp-num) "③")
+                ((= 4 persp-num) "④")
+                ((= 5 persp-num) "⑤")
+                ((= 6 persp-num) "⑥")
+                (t persp-num)))))
     :config
     (progn
       (setq persp-nil-name "@spacemacs")
@@ -75,6 +87,17 @@ Cancels autosave on exiting perspectives mode."
         "Lk" #'persp-remove-buffer)
       (when persp-mode-autosave
         (add-hook 'persp-mode-hook #'persp-autosave))
+
+      (spacemacs|define-mode-line-segment persp-number
+        (spacemacs/persp-number)
+        :when (bound-and-true-p persp-mode))
+
+      (setq spacemacs-mode-line-left
+            (cons '((persp-number window-number)
+                    :fallback state-tag
+                    :seperator "|"
+                    :face state-face)
+                  (cdr spacemacs-mode-line-left)))
       (persp-mode t))))
 
 
