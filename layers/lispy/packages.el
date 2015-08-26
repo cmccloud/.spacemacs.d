@@ -23,6 +23,7 @@
 
 (defun lispy/init-lispy ()
   (use-package lispy
+    :diminish lispy-mode " Ⓛ"
     :preface
     (progn
       (defvar lispy-major-modes '(emacs-lisp-mode clojure-mode)

@@ -61,19 +61,7 @@ Cancels autosave on exiting perspectives mode."
                      (persp-save-state-to-file))))
           (when persp-autosave-timer
             (cancel-timer persp-autosave-timer)
-            (setq persp-autosave-timer nil))))
-      (defun spacemacs/persp-number ()
-        "Returns index of current perspective in `PERSP-NAMES-SORTED'."
-        (let ((persp-num (-elem-index (safe-persp-name (get-frame-persp))
-                                      (persp-names-sorted))))
-          (cond ((= 0 persp-num) "⓪")
-                ((= 1 persp-num) "①")
-                ((= 2 persp-num) "②")
-                ((= 3 persp-num) "③")
-                ((= 4 persp-num) "④")
-                ((= 5 persp-num) "⑤")
-                ((= 6 persp-num) "⑥")
-                (t persp-num)))))
+            (setq persp-autosave-timer nil)))))
     :config
     (progn
       (setq persp-nil-name "@spacemacs")
@@ -87,17 +75,6 @@ Cancels autosave on exiting perspectives mode."
         "Lk" #'persp-remove-buffer)
       (when persp-mode-autosave
         (add-hook 'persp-mode-hook #'persp-autosave))
-
-      (spacemacs|define-mode-line-segment persp-number
-        (spacemacs/persp-number)
-        :when (bound-and-true-p persp-mode))
-
-      (setq spacemacs-mode-line-left
-            (cons '((persp-number window-number)
-                    :fallback state-tag
-                    :seperator "|"
-                    :face state-face)
-                  (cdr spacemacs-mode-line-left)))
       (persp-mode t))))
 
 

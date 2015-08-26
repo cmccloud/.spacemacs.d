@@ -35,6 +35,7 @@
      ;; my configuration layers
      lispy
      doc-view-compatibility
+     evil-cleverparens
      edebug
      persp-mode
      popwin-pop-repl
@@ -46,6 +47,7 @@
    dotspacemacs-additional-packages
    '(material-theme
      color-theme-sanityinc-tomorrow
+     cl-lib-highlight
      base16-theme)
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '()
@@ -298,7 +300,7 @@ before layers configuration."
             erc-track-exclude-server-buffer t
             erc-track-position-in-mode-line t
             erc-join-buffer 'bury
-            erc-image-inline-rescale 'window
+            erc-image-inline-rescale 65
             erc-hl-nicks-minimum-contrast-ratio 3.5
             erc-hl-nicks-color-contrast-strategy '(invert contrast)
             erc-current-nick-highlight-type 'all
@@ -369,6 +371,7 @@ layers configuration."
         paradox-github-token t
         even-window-heights nil
         flycheck-highlighting-mode nil
+        echo-keystrokes .1
         smooth-scroll-margin 4               ; helps scroll lag for now
         cider-ovelays-use-font-lock t        ; misspelled
         cider-required-nrepl-version "0.2.6" ; suppress warning message
@@ -378,6 +381,7 @@ layers configuration."
   (semantic-mode)
   (spacemacs/toggle-vi-tilde-fringe-off)
   (fringe-mode 4)
+  (cl-lib-highlight-initialize)
 
   ;; build file cache
   (file-cache-add-directory-list
