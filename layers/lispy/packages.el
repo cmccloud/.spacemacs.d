@@ -15,8 +15,7 @@
 (setq lispy-packages
     '(
       lispy
-      evil
-      ))
+      evil))
 
 ;; List of packages to exclude.
 (setq lispy-excluded-packages '())
@@ -43,13 +42,19 @@ Used by `lispy-enter-maybe'.")
     :config
     (progn
       ;; lispy keybindings
-      (define-key global-map (kbd "C-c l") 'lispy-toggle)
+      (define-key evil-emacs-state-map (kbd "C-c l") 'lispy-toggle)
+      (define-key lispy-mode-map (kbd "C-c l") 'lispy-toggle)
+      (define-key lispy-mode-map (kbd "C-c C-f") 'helm-multi-files)
       (define-key lispy-mode-map (kbd "C-?") 'helm-descbinds)
+      (define-key lispy-mode-map (kbd "C-o") 'evil-jumper/backward)
+      (define-key lispy-mode-map (kbd "TAB") 'evil-jumper/forward)
       (define-key lispy-mode-map (kbd "C-f") 'lispy-forward)
       (define-key lispy-mode-map (kbd "C-d") 'lispy-backward)
       (define-key lispy-mode-map (kbd "M-u") 'lispy-undo)
       (define-key lispy-mode-map (kbd "[") 'lispy-brackets)
-      (define-key lispy-mode-map (kbd "{") 'lispy-braces))))
+      (define-key lispy-mode-map (kbd "{") 'lispy-braces)
+      ;; use helm rather than ivy
+      (advice-add 'lispy-occur :override #'helm-occur))))
 
 (defun lispy/pre-init-evil ()
   (spacemacs|use-package-add-hook evil

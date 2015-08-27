@@ -371,17 +371,21 @@ layers configuration."
         paradox-github-token t
         even-window-heights nil
         flycheck-highlighting-mode nil
-        echo-keystrokes .1
+        echo-keystrokes .02
         smooth-scroll-margin 4               ; helps scroll lag for now
         cider-ovelays-use-font-lock t        ; misspelled
         cider-required-nrepl-version "0.2.6" ; suppress warning message
         markdown-open-command "marked")
 
-  ;; default toggles
+  ;; defaults
   (semantic-mode)
   (spacemacs/toggle-vi-tilde-fringe-off)
   (fringe-mode 4)
   (cl-lib-highlight-initialize)
+  (add-hook 'emacs-lisp-mode-hook
+            'rainbow-delimiters-mode)
+  (add-hook 'clojure-mode-hook
+            'rainbow-delimiters-mode)
 
   ;; build file cache
   (file-cache-add-directory-list

@@ -67,12 +67,12 @@
  '(helm-display-header-line nil)
  '(helm-echo-input-in-header-line t)
  '(helm-file-cache-fuzzy-match t)
- '(helm-imenu-fuzzy-match t t)
+ '(helm-imenu-fuzzy-match t)
  '(helm-lisp-fuzzy-completion t)
  '(helm-locate-fuzzy-match t)
  '(helm-mode t)
  '(helm-recentf-fuzzy-match t)
- '(helm-semantic-fuzzy-match t t)
+ '(helm-semantic-fuzzy-match t)
  '(helm-split-window-in-side-p t)
  '(helm-swoop-speed-or-color t)
  '(helm-swoop-split-with-multiple-windows t)
@@ -99,9 +99,15 @@
  '(hl-fg-colors
    (quote
     ("#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3")))
+ '(lispy-completion-method (quote default))
+ '(lispy-eval-display-style (quote overlay))
+ '(lispy-no-permanent-semantic t)
+ '(lispy-occur-backend (quote ivy))
+ '(lispy-visit-method (quote projectile))
  '(magit-diff-use-overlays nil)
  '(pos-tip-background-color "#eee8d5")
  '(pos-tip-foreground-color "#586e75")
+ '(rainbow-delimiters-max-face-count 1)
  '(ring-bell-function (quote ignore) t)
  '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#eee8d5" 0.2))
  '(term-default-bg-color "#fdf6e3")
@@ -109,3 +115,11 @@
  '(weechat-color-list
    (quote
     (unspecified "#fdf6e3" "#eee8d5" "#990A1B" "#dc322f" "#546E00" "#859900" "#7B6000" "#b58900" "#00629D" "#268bd2" "#93115C" "#d33682" "#00736F" "#2aa198" "#657b83" "#839496"))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:foreground "#DCDCCC" :background "#3F3F3F"))))
+ '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
+ '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
