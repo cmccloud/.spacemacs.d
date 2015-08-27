@@ -216,18 +216,6 @@ before layers configuration."
   (spacemacs|use-package-add-hook helm
     :post-config
     (progn
-      (defun helm-find-contrib-file ()
-        "Runs helm find files on spacemacs contrib folder"
-        (interactive)
-        (helm-find-files-1
-         (expand-file-name (concat user-emacs-directory "contrib/"))))
-
-      (defun helm-find-spacemacs-file ()
-        "Runs helm find files on spacemacs directory"
-        (interactive)
-        (helm-find-files-1
-         (expand-file-name (concat user-emacs-directory "spacemacs/"))))
-
       ;; helm for files settings
       (setq helm-for-files-preferred-list
             '(helm-source-buffers-list
@@ -249,14 +237,11 @@ before layers configuration."
       (define-key global-map [remap list-buffers] 'helm-buffers-list)
       (define-key global-map [remap switch-to-buffer] 'helm-buffers-list)
       (define-key global-map [remap apropos-command] 'helm-apropos)
-      (define-key global-map [remap find-spacemacs-file]
-        'helm-find-spacemacs-file)
-      (define-key global-map [remap find-contrib-file] 'helm-find-contrib-file)
-      (define-key global-map [remap isearch-forward] 'helm-swoop)
       (define-key global-map [remap info-emacs-manual] 'helm-info-emacs)
       (define-key global-map [remap persp-switch] 'helm-perspectives)
 
-      ;; user reserved key-bindings
+      ;; user keybinds
+      (define-key global-map (kbd "C-s") 'helm-swoop)
       (define-key global-map (kbd "C-c r") 'helm-semantic-or-imenu)
       (define-key global-map (kbd "C-c e") 'eval-defun)))
 
@@ -274,6 +259,9 @@ before layers configuration."
       (defun erc-gitter-connect ()
         "Quick connect to irc.gitter.im"
         (interactive)
+        ;; clean up old buffers if they exist
+        (kill-buffer "#syl20bnr/spacemacs")
+        (kill-buffer "irc.gitter.im:6667")
         (erc-ssl :server "irc.gitter.im"
                  :port 6667
                  :nick "cmccloud"
@@ -291,6 +279,10 @@ before layers configuration."
         "aif" 'erc-freenode-connect
         "ais" 'erc-slack-connect)
 
+      ;; if imagemagick isn't supported, we don't want inline images
+      (unless (fboundp 'imagemagick-types)
+        (setq erc-modules (-remove-item 'image erc-modules)))
+
       ;; TODO: mode-line channels
       (setq erc-autojoin-channels-alist
             '(("1\\.0\\.0" "#syl20bnr/spacemacs")
@@ -300,7 +292,6 @@ before layers configuration."
             erc-track-exclude-server-buffer t
             erc-track-position-in-mode-line t
             erc-join-buffer 'bury
-            erc-image-inline-rescale 65
             erc-hl-nicks-minimum-contrast-ratio 3.5
             erc-hl-nicks-color-contrast-strategy '(invert contrast)
             erc-current-nick-highlight-type 'all
@@ -308,10 +299,7 @@ before layers configuration."
             erc-track-shorten-aggressively 'max
             erc-prompt-for-nickserv-password nil)
 
-      ;; osx doesn't have dbus support
-      (when (eq system-type 'darwin)
-        (remove-hook 'erc-text-matched-hook 'erc-global-notify))
-      ;; we dont need paren highlighting either
+      ;; we dont need paren highlighting
       (add-hook 'erc-mode-hook 'turn-off-show-smartparens-mode)))
 
   (spacemacs|use-package-add-hook popwin
@@ -390,6 +378,11 @@ layers configuration."
   ;; build file cache
   (file-cache-add-directory-list
    '("~/Documents/Programming Books/"))
+
+  ;; code-to-remove-once-merged-into-spacemacs
+  (evil-leader/set-key
+    "fes" 'helm-find-spacemacs-file
+    "fec" 'helm-find-contrib-file)
 
   ;; performance
   (setq bidi-display-reordering nil)
