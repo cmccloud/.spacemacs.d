@@ -135,7 +135,7 @@ before layers configuration."
    dotspacemacs-fullscreen-at-startup nil
    ;; If non nil `spacemacs/toggle-fullscreen' will not use native fullscreen.
    ;; Use to disable fullscreen animations in OSX."
-   dotspacemacs-fullscreen-use-non-native nil
+   dotspacemacs-fullscreen-use-non-native t
    ;; If non nil the frame is maximized when Emacs starts up.
    ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
    ;; (Emacs 24.4+ only)
@@ -283,7 +283,6 @@ before layers configuration."
       (unless (fboundp 'imagemagick-types)
         (setq erc-modules (-remove-item 'image erc-modules)))
 
-      ;; TODO: mode-line channels
       (setq erc-autojoin-channels-alist
             '(("1\\.0\\.0" "#syl20bnr/spacemacs")
               ("freenode.net" "#emacs"))

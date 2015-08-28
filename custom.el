@@ -74,8 +74,8 @@
  '(helm-recentf-fuzzy-match t)
  '(helm-semantic-fuzzy-match t)
  '(helm-split-window-in-side-p t)
- '(helm-swoop-speed-or-color t)
- '(helm-swoop-split-with-multiple-windows t)
+ '(helm-swoop-speed-or-color t t)
+ '(helm-swoop-split-with-multiple-windows t t)
  '(highlight-changes-colors (quote ("#d33682" "#6c71c4")))
  '(highlight-symbol-colors
    (--map
@@ -99,6 +99,8 @@
  '(hl-fg-colors
    (quote
     ("#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3")))
+ '(lispy-avy-style-char (quote at))
+ '(lispy-avy-style-symbol (quote post))
  '(lispy-completion-method (quote default))
  '(lispy-eval-display-style (quote overlay))
  '(lispy-no-permanent-semantic t)
@@ -120,5 +122,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(default ((t (:family "M+ 1mn" :foundry "nil" :slant normal :weight normal :height 140 :width normal))))
  '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
  '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
