@@ -41,6 +41,7 @@ Used by `lispy-enter-maybe'.")
     :config
     (progn
       ;; lispy keybindings
+      (lispy-set-key-theme '(special paraedit c-digits))
       (define-key lispy-mode-map (kbd "C-c l") 'lispy-toggle)
       (define-key lispy-mode-map (kbd "C-f") 'helm-multi-files)
       (define-key lispy-mode-map (kbd "C-?") 'helm-descbinds)
@@ -48,18 +49,21 @@ Used by `lispy-enter-maybe'.")
       (define-key lispy-mode-map (kbd "TAB") 'evil-jumper/forward)
       (define-key lispy-mode-map (kbd "C-n") 'lispy-forward)
       (define-key lispy-mode-map (kbd "C-p") 'lispy-backward)
+      (define-key lispy-mode-map (kbd "C-l") 'forward-char)
+      (define-key lispy-mode-map (kbd "C-h") 'backward-char)
       (define-key lispy-mode-map (kbd "M-u") 'lispy-undo)
       (define-key lispy-mode-map (kbd "[") 'lispy-brackets)
       (define-key lispy-mode-map (kbd "{") 'lispy-braces)
       (define-key lispy-mode-map (kbd "M-p") 'lispy-move-up)
       (define-key lispy-mode-map (kbd "M-n") 'lispy-move-down)
-      (define-key lispy-mode-map (kbd "C-s") 'helm-swoop)
+      (define-key lispy-mode-map (kbd "C-s") 'helm-occur)
+      (define-key lispy-mode-map (kbd "DEL") 'lispy-delete-backward)
 
       ;; use lispy-define-key for new specials
       ;; :inserter defaults to self-insert-command
+      ;; but can be explicitly set as well
       ;; :override takes a quoted form and allows to add
       ;; conditionals, see abo-abo/lispy#111
-      ;; but can be explicitly set as well
       (lispy-define-key lispy-mode-map (kbd "b") 'lispy-barf)
       (lispy-define-key lispy-mode-map (kbd "s") 'lispy-slurp)
       (lispy-define-key lispy-mode-map (kbd "y") 'lispy-new-copy)

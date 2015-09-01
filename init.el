@@ -46,6 +46,7 @@
    ;; configuration in `dotspacemacs/config'.
    dotspacemacs-additional-packages
    '(material-theme
+     flycheck-clojure
      color-theme-sanityinc-tomorrow
      cl-lib-highlight
      base16-theme)
@@ -135,7 +136,7 @@ before layers configuration."
    dotspacemacs-fullscreen-at-startup nil
    ;; If non nil `spacemacs/toggle-fullscreen' will not use native fullscreen.
    ;; Use to disable fullscreen animations in OSX."
-   dotspacemacs-fullscreen-use-non-native t
+   dotspacemacs-fullscreen-use-non-native nil
    ;; If non nil the frame is maximized when Emacs starts up.
    ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
    ;; (Emacs 24.4+ only)
@@ -216,6 +217,11 @@ before layers configuration."
   (spacemacs|use-package-add-hook helm
     :post-config
     (progn
+      ;; use mdfind for OSX
+      (with-eval-after-load "helm-locate"
+        (when (eql system-type 'darwin)
+         (setq helm-locate-command "mdfind -name %s %s"
+               helm-locate-fuzzy-match nil)))
       ;; helm for files settings
       (setq helm-for-files-preferred-list
             '(helm-source-buffers-list
@@ -355,13 +361,13 @@ layers configuration."
         doc-view-continuous t
         sp-show-pair-from-inside t      ; accounts for evil
         lispy-no-permanent-semantic t
+        eshell-buffer-maximum-lines 2000
         paradox-github-token t
         even-window-heights nil
         flycheck-highlighting-mode nil
         echo-keystrokes .02
         smooth-scroll-margin 4               ; helps scroll lag for now
         cider-ovelays-use-font-lock t        ; misspelled
-        cider-required-nrepl-version "0.2.6" ; suppress warning message
         markdown-open-command "marked")
 
   ;; defaults
@@ -373,15 +379,12 @@ layers configuration."
             'rainbow-delimiters-mode)
   (add-hook 'clojure-mode-hook
             'rainbow-delimiters-mode)
+  (with-eval-after-load "flycheck"
+    (flycheck-clojure-setup))
 
   ;; build file cache
   (file-cache-add-directory-list
    '("~/Documents/Programming Books/"))
-
-  ;; code-to-remove-once-merged-into-spacemacs
-  (evil-leader/set-key
-    "fes" 'helm-find-spacemacs-file
-    "fec" 'helm-find-contrib-file)
 
   ;; performance
   (setq bidi-display-reordering nil)

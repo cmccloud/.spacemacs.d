@@ -30,21 +30,21 @@
       ;; cider repl
       (defun popwin--pop-cider-repl ()
         "Toggles as a popwin window the first active instance of cider repl."
-        (when (get-buffer "*cider-repl localhost*")
-          (if (get-buffer-window "*cider-repl localhost*" t)
+        (when (get-buffer (cider-find-relevant-connection))
+          (if (get-buffer-window (cider-find-relevant-connection) t)
               (progn
                 (popwin:close-popup-window t)
                 ;; only if popwin failed
                 (-when-let (retry
-                            (get-buffer-window "*cider-repl localhost*" t))
+                            (get-buffer-window (cider-find-relevant-connection) t))
                   (delete-window retry)))
             (popwin:popup-buffer
-             "*cider-repl localhost*"
+             (cider-find-relevant-connection)
              :position 'bottom
              :height .3
              :stick t
              :tail t
-             :noselect t
+             :noselect nil
              :dedicated t))))
 
       ;; ielm repl
