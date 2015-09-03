@@ -45,10 +45,10 @@
    ;; packages then consider to create a layer, you can also put the
    ;; configuration in `dotspacemacs/config'.
    dotspacemacs-additional-packages
-   '(material-theme
+   '(cl-lib-highlight
      flycheck-clojure
+     material-theme
      color-theme-sanityinc-tomorrow
-     cl-lib-highlight
      base16-theme)
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '()
@@ -217,11 +217,20 @@ before layers configuration."
   (spacemacs|use-package-add-hook helm
     :post-config
     (progn
+      ;; sometimes we need to edit system files
+      (defun helm-find-files-as-sudo ()
+        (interactive)
+        (helm-find-files-1 "/sudo::/"))
+
       ;; use mdfind for OSX
       (with-eval-after-load "helm-locate"
         (when (eql system-type 'darwin)
          (setq helm-locate-command "mdfind -name %s %s"
                helm-locate-fuzzy-match nil)))
+
+      ;; add colors to remote connections
+      (setq helm-ff-tramp-not-fancy nil)
+
       ;; helm for files settings
       (setq helm-for-files-preferred-list
             '(helm-source-buffers-list
@@ -266,8 +275,10 @@ before layers configuration."
         "Quick connect to irc.gitter.im"
         (interactive)
         ;; clean up old buffers if they exist
-        (kill-buffer "#syl20bnr/spacemacs")
-        (kill-buffer "irc.gitter.im:6667")
+        (when (get-buffer "#syl20bnr/spacemacs")
+          (kill-buffer "#syl20bnr/spacemacs"))
+        (when (get-buffer "irc.gitter.im:6667")
+          (kill-buffer "irc.gitter.im:6667"))
         (erc-ssl :server "irc.gitter.im"
                  :port 6667
                  :nick "cmccloud"
@@ -387,7 +398,7 @@ layers configuration."
    '("~/Documents/Programming Books/"))
 
   ;; performance
-  (setq bidi-display-reordering nil)
-  (setq max-lisp-eval-depth 30000)
-  (setq max-specpdl-size 30000)
-  (setq large-file-warning-threshold 25000000))
+  (setq bidi-display-reordering nil
+        max-lisp-eval-depth 30000
+        max-specpdl-size 30000
+        large-file-warning-threshold 25000000))

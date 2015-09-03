@@ -67,15 +67,15 @@
  '(helm-display-header-line nil)
  '(helm-echo-input-in-header-line t)
  '(helm-file-cache-fuzzy-match t)
- '(helm-imenu-fuzzy-match t)
+ '(helm-imenu-fuzzy-match t t)
  '(helm-lisp-fuzzy-completion t)
  '(helm-locate-fuzzy-match t)
  '(helm-mode t)
  '(helm-recentf-fuzzy-match t)
- '(helm-semantic-fuzzy-match t)
+ '(helm-semantic-fuzzy-match t t)
  '(helm-split-window-in-side-p t)
- '(helm-swoop-speed-or-color t t)
- '(helm-swoop-split-with-multiple-windows t t)
+ '(helm-swoop-speed-or-color t)
+ '(helm-swoop-split-with-multiple-windows t)
  '(highlight-changes-colors (quote ("#d33682" "#6c71c4")))
  '(highlight-symbol-colors
    (--map
@@ -116,12 +116,14 @@
  '(term-default-fg-color "#657b83")
  '(weechat-color-list
    (quote
-    (unspecified "#fdf6e3" "#eee8d5" "#990A1B" "#dc322f" "#546E00" "#859900" "#7B6000" "#b58900" "#00629D" "#268bd2" "#93115C" "#d33682" "#00736F" "#2aa198" "#657b83" "#839496"))))
+    (unspecified "#fdf6e3" "#eee8d5" "#990A1B" "#dc322f" "#546E00" "#859900" "#7B6000" "#b58900" "#00629D" "#268bd2" "#93115C" "#d33682" "#00736F" "#2aa198" "#657b83" "#839496")))
+ '(xterm-mouse-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "M+ 1mn" :foundry "nil" :slant normal :weight normal :height 140 :width normal))))
+ '(default ((t (:foreground "#DCDCCC" :background "#3F3F3F"))))
  '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
- '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
+ '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil))))
+ '(term ((t (:inherit default)))))
