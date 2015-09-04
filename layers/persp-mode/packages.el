@@ -30,10 +30,10 @@
                                                  (:restriction 1)
                                                  (buffer-list)))
                     :fuzzy-match t
-                    :action (quote (("Add buffer(s) to current perspective" .
-                                     (lambda (candidate)
-                                       (mapc #'persp-add-buffer
-                                             (helm-marked-candidates)))))))))
+                    :action '(("Add buffer(s) to current perspective" .
+                              (lambda (candidate)
+                                (mapc #'persp-add-buffer
+                                      (helm-marked-candidates))))))))
 
       (defun helm-perspectives ()
         "Selects or creates perspective."
@@ -49,11 +49,7 @@
                        '(("Switch to perspective" . persp-switch)))
                     ,(helm-build-dummy-source "Create new perspective"
                        :action
-                       '(("Create new perspective" . persp-switch))))))
-
-      (evil-leader/set-key
-        "Ls" 'helm-perspectives
-        "La" 'helm-add-buffers-to-current-perspective))))
+                       '(("Create new perspective" . persp-switch)))))))))
 
 (defun persp-mode/init-persp-mode ()
   (use-package persp-mode
@@ -87,10 +83,10 @@ Cancels autosave on exiting perspectives mode."
       (setq persp-nil-name "@spacemacs")
       (spacemacs/declare-prefix "L" "layouts")
       (evil-leader/set-key
-        "Ls" #'persp-switch
+        "Ls" #'helm-perspectives
         "Lr" #'persp-rename
         "Lc" #'persp-kill
-        "La" #'persp-add-buffer
+        "La" #'helm-add-buffers-to-current-perspective
         "Lt" #'persp-temporarily-display-buffer
         "Lk" #'persp-remove-buffer)
       (add-hook 'persp-mode-hook #'persp-autosave)

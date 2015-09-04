@@ -32,6 +32,7 @@
      javascript
      html
      markdown
+     lua
      ;; my configuration layers
      lispy
      doc-view-compatibility
@@ -254,7 +255,6 @@ before layers configuration."
       (define-key global-map [remap switch-to-buffer] 'helm-buffers-list)
       (define-key global-map [remap apropos-command] 'helm-apropos)
       (define-key global-map [remap info-emacs-manual] 'helm-info-emacs)
-      (define-key global-map [remap persp-switch] 'helm-perspectives)
 
       ;; user keybinds
       (define-key global-map (kbd "C-c t") 'helm-gtags-select)
@@ -277,10 +277,8 @@ before layers configuration."
         "Quick connect to irc.gitter.im"
         (interactive)
         ;; clean up old buffers if they exist
-        (cl-loop for buf in (cdr (assoc "1\\.0\\.0"
-                                        erc-autojoin-channels-alist))
-                 when (get-buffer buf)
-                 do (kill-buffer buf))
+        (dolist (buf '("irc.gitter.im:6667" "#syl20bnr/spacemacs"))
+          (when (get-buffer buf) (kill-buffer buf)))
         (erc-ssl :server "irc.gitter.im"
                  :port 6667
                  :nick "cmccloud"
@@ -290,10 +288,8 @@ before layers configuration."
         "Quick connect to irc.freenode.net"
         (interactive)
         ;; clean up old buffers if they exist
-        (cl-loop for buf in (cdr (assoc "freenode.net"
-                                        erc-autojoin-channels-alist))
-                 when (get-buffer buf)
-                 do (kill-buffer buf))
+        (dolist (buf '("irc.freenode.net:6667" "#emacs" "#clojure"))
+          (when (get-buffer buf) (kill-buffer buf)))
         (erc :server "irc.freenode.net"
              :port 6667
              :nick "cmccloud"))
@@ -381,6 +377,7 @@ layers configuration."
         lispy-no-permanent-semantic t
         eshell-buffer-maximum-lines 2000
         paradox-github-token t
+        magit-push-always-verify nil
         even-window-heights nil
         helm-locate-fuzzy-match nil
         flycheck-highlighting-mode nil
@@ -396,6 +393,7 @@ layers configuration."
 
   ;; defaults
   (semantic-mode)
+  (global-semanticdb-minor-mode)
   (spacemacs/toggle-vi-tilde-fringe-off)
   (fringe-mode 4)
   (cl-lib-highlight-initialize)
