@@ -372,7 +372,6 @@ layers configuration."
           (setq dired-listing-switches "-al --group-directories-first"))
       (setq dired-listing-switches "-al")))
 
-
   ;; misc settings
   (setq powerline-default-separator nil
         avy-all-windows nil
@@ -412,7 +411,7 @@ layers configuration."
    '("~/Documents/Programming Books/"))
 
   ;; performance
-  (setq bidi-display-reordering nil
-        max-lisp-eval-depth 30000
-        max-specpdl-size 30000
-        large-file-warning-threshold 25000000))
+  (setq-default bidi-display-reordering nil
+                max-lisp-eval-depth 30000
+                max-specpdl-size 30000
+                large-file-warning-threshold 25000000))
