@@ -51,7 +51,7 @@
 Autosaves perspectives layouts every `persp-autosave-interal' seconds.
 Cancels autosave on exiting perspectives mode."
         (message "Perspectives mode autosaving enabled.")
-        (if persp-mode
+        (if (and persp-mode-autosave persp-mode)
             (setq persp-autosave-timer
                   (run-with-timer
                    persp-autosave-interval
@@ -73,8 +73,7 @@ Cancels autosave on exiting perspectives mode."
         "La" #'persp-add-buffer
         "Lt" #'persp-temporarily-display-buffer
         "Lk" #'persp-remove-buffer)
-      (when persp-mode-autosave
-        (add-hook 'persp-mode-hook #'persp-autosave))
+      (add-hook 'persp-mode-hook #'persp-autosave)
       (persp-mode t))))
 
 

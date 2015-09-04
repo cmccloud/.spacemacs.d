@@ -47,6 +47,7 @@
    dotspacemacs-additional-packages
    '(cl-lib-highlight
      flycheck-clojure
+     helm-gtags
      material-theme
      color-theme-sanityinc-tomorrow
      base16-theme)
@@ -226,7 +227,7 @@ before layers configuration."
       (with-eval-after-load "helm-locate"
         (when (eql system-type 'darwin)
          (setq helm-locate-command "mdfind -name %s %s"
-               helm-locate-fuzzy-match nil)))
+               helm-locate-fuzzy-match nil))) ; this is getting overwritten
 
       ;; add colors to remote connections
       (setq helm-ff-tramp-not-fancy nil)
@@ -256,6 +257,7 @@ before layers configuration."
       (define-key global-map [remap persp-switch] 'helm-perspectives)
 
       ;; user keybinds
+      (define-key global-map (kbd "C-c t") 'helm-gtags-select)
       (define-key global-map (kbd "C-s") 'helm-swoop)
       (define-key global-map (kbd "C-c r") 'helm-semantic-or-imenu)
       (define-key global-map (kbd "C-c e") 'eval-defun)))
@@ -275,10 +277,10 @@ before layers configuration."
         "Quick connect to irc.gitter.im"
         (interactive)
         ;; clean up old buffers if they exist
-        (when (get-buffer "#syl20bnr/spacemacs")
-          (kill-buffer "#syl20bnr/spacemacs"))
-        (when (get-buffer "irc.gitter.im:6667")
-          (kill-buffer "irc.gitter.im:6667"))
+        (cl-loop for buf in (cdr (assoc "1\\.0\\.0"
+                                        erc-autojoin-channels-alist))
+                 when (get-buffer buf)
+                 do (kill-buffer buf))
         (erc-ssl :server "irc.gitter.im"
                  :port 6667
                  :nick "cmccloud"
@@ -287,6 +289,11 @@ before layers configuration."
       (defun erc-freenode-connect ()
         "Quick connect to irc.freenode.net"
         (interactive)
+        ;; clean up old buffers if they exist
+        (cl-loop for buf in (cdr (assoc "freenode.net"
+                                        erc-autojoin-channels-alist))
+                 when (get-buffer buf)
+                 do (kill-buffer buf))
         (erc :server "irc.freenode.net"
              :port 6667
              :nick "cmccloud"))
@@ -302,7 +309,7 @@ before layers configuration."
 
       (setq erc-autojoin-channels-alist
             '(("1\\.0\\.0" "#syl20bnr/spacemacs")
-              ("freenode.net" "#emacs"))
+              ("freenode.net" "#emacs" "#clojure"))
             erc-hide-list '("JOIN" "PART" "QUIT" "NICK" "MODE" "353")
             erc-track-exclude-types '("JOIN" "PART" "QUIT" "NICK" "MODE" "353")
             erc-track-exclude-server-buffer t
@@ -365,6 +372,7 @@ layers configuration."
           (setq dired-listing-switches "-al --group-directories-first"))
       (setq dired-listing-switches "-al")))
 
+
   ;; misc settings
   (setq powerline-default-separator nil
         avy-all-windows nil
@@ -375,11 +383,17 @@ layers configuration."
         eshell-buffer-maximum-lines 2000
         paradox-github-token t
         even-window-heights nil
+        helm-locate-fuzzy-match nil
         flycheck-highlighting-mode nil
         echo-keystrokes .02
         smooth-scroll-margin 4               ; helps scroll lag for now
         cider-ovelays-use-font-lock t        ; misspelled
         markdown-open-command "marked")
+
+  ;; fontify boolean operators
+  (font-lock-add-keywords
+   'emacs-lisp-mode
+   '(("\\<\\(and\\|or\\|not\\)\\>" . 'font-lock-keyword-face)))
 
   ;; defaults
   (semantic-mode)
