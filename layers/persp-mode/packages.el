@@ -19,6 +19,22 @@
   (spacemacs|use-package-add-hook helm
     :post-config
     (progn
+      (defun helm-add-buffers-to-current-perspective ()
+        "Adds selected buffer(s) to current perspective."
+        (interactive)
+        (helm
+         :buffer "*Helm add buffers to current perspective*"
+         :sources (helm-build-in-buffer-source
+                      "Buffers"
+                    :data (mapcar #'buffer-name (with-persp-buffer-list
+                                                 (:restriction 1)
+                                                 (buffer-list)))
+                    :fuzzy-match t
+                    :action (quote (("Add buffer(s) to current perspective" .
+                                     (lambda (candidate)
+                                       (mapc #'persp-add-buffer
+                                             (helm-marked-candidates)))))))))
+
       (defun helm-perspectives ()
         "Selects or creates perspective."
         (interactive)
@@ -33,7 +49,11 @@
                        '(("Switch to perspective" . persp-switch)))
                     ,(helm-build-dummy-source "Create new perspective"
                        :action
-                       '(("Create new perspective" . persp-switch)))))))))
+                       '(("Create new perspective" . persp-switch))))))
+
+      (evil-leader/set-key
+        "Ls" 'helm-perspectives
+        "La" 'helm-add-buffers-to-current-perspective))))
 
 (defun persp-mode/init-persp-mode ()
   (use-package persp-mode
