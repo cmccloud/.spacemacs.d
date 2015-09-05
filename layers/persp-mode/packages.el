@@ -80,7 +80,9 @@ Cancels autosave on exiting perspectives mode."
             (setq persp-autosave-timer nil)))))
     :config
     (progn
-      (setq persp-nil-name "@spacemacs")
+      (setq persp-nil-name "@spacemacs"
+            persp-save-dir (concat spacemacs-cache-directory
+                                   "persp-confs/"))
       (spacemacs/declare-prefix "L" "layouts")
       (evil-leader/set-key
         "Ls" #'helm-perspectives

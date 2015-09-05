@@ -34,6 +34,7 @@
      markdown
      lua
      ;; my configuration layers
+     lively
      lispy
      doc-view-compatibility
      evil-cleverparens
@@ -224,12 +225,6 @@ before layers configuration."
         (interactive)
         (helm-find-files-1 "/sudo::/"))
 
-      ;; use mdfind for OSX
-      (with-eval-after-load "helm-locate"
-        (when (eql system-type 'darwin)
-         (setq helm-locate-command "mdfind -name %s %s"
-               helm-locate-fuzzy-match nil))) ; this is getting overwritten
-
       ;; add colors to remote connections
       (setq helm-ff-tramp-not-fancy nil)
 
@@ -355,18 +350,24 @@ layers configuration."
         user-mail-address "mccloud.christopher@gmail.com")
 
   ;; osx config
-  ;; something like the old space cadet keyboard
   (when (eq system-type 'darwin)
+    ;; something like the old space cadet keyboard
     (setq mac-option-key-is-meta nil
           mac-command-key-is-meta t
           mac-command-modifier 'meta
           mac-option-modifier 'super)
     ;; have we installed coreutils?
     (if (executable-find "gls")
-        (progn
-          (setq insert-directory-program "gls")
-          (setq dired-listing-switches "-al --group-directories-first"))
-      (setq dired-listing-switches "-al")))
+        (setq insert-directory-program "gls"
+              dired-listing-switches "-al --group-directories-first")
+      (setq dired-listing-switches "-al"))
+    ;; use mdfind rather than locate
+    (with-eval-after-load "helm-locate"
+      (setq helm-locate-command "mdfind -name %s %s"
+            helm-locate-fuzzy-match nil))
+    ;; used marked2.app for markdown live preview
+    (when (executable-find "marked")
+      (setq markdown-open-command "marked")))
 
   ;; misc settings
   (setq powerline-default-separator nil
@@ -379,21 +380,13 @@ layers configuration."
         paradox-github-token t
         magit-push-always-verify nil
         even-window-heights nil
-        helm-locate-fuzzy-match nil
         flycheck-highlighting-mode nil
         echo-keystrokes .02
         smooth-scroll-margin 4               ; helps scroll lag for now
-        cider-ovelays-use-font-lock t        ; misspelled
-        markdown-open-command "marked")
-
-  ;; fontify boolean operators
-  (font-lock-add-keywords
-   'emacs-lisp-mode
-   '(("\\<\\(and\\|or\\|not\\)\\>" . 'font-lock-keyword-face)))
+        cider-ovelays-use-font-lock t)
 
   ;; defaults
   (semantic-mode)
-  (global-semanticdb-minor-mode)
   (spacemacs/toggle-vi-tilde-fringe-off)
   (fringe-mode 4)
   (cl-lib-highlight-initialize)
@@ -403,10 +396,6 @@ layers configuration."
             'rainbow-delimiters-mode)
   (with-eval-after-load "flycheck"
     (flycheck-clojure-setup))
-
-  ;; build file cache
-  (file-cache-add-directory-list
-   '("~/Documents/Programming Books/"))
 
   ;; performance
   (setq-default bidi-display-reordering nil
