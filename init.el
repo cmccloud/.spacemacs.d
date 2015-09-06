@@ -103,12 +103,12 @@ before layers configuration."
                                :width normal
                                :powerline-scale 1.1)
    ;; The leader key
-   dotspacemacs-leader-key "SPC"
+   dotspacemacs-leader-key "M-m"
    ;; The leader key accessible in `emacs state' and `insert state'
    dotspacemacs-emacs-leader-key "M-m"
    ;; Major mode leader key is a shortcut key which is the equivalent of
    ;; pressing `<leader> m`. Set it to `nil` to disable it.
-   dotspacemacs-major-mode-leader-key ","
+   dotspacemacs-major-mode-leader-key "C-M-m"
    ;; Major mode leader key accessible in `emacs state' and `insert state'
    dotspacemacs-major-mode-emacs-leader-key "C-M-m"
    ;; The command key used for Evil commands (ex-commands) and
@@ -208,14 +208,7 @@ before layers configuration."
       ;; user reserved key-bindings
       (evil-leader/set-key "od" 'dired-jump)
       (evil-leader/set-key "or" 'popwin-pop-repl)
-      (evil-leader/set-key "ov" 'set-variable)
-
-      ;; helm multi-files
-      (define-key global-map (kbd "C-f") 'helm-multi-files)
-      (define-key evil-normal-state-map (kbd "C-f") 'helm-multi-files)
-      (define-key evil-evilified-state-map (kbd "C-f") 'helm-multi-files)
-      (define-key evil-motion-state-map (kbd "C-f") 'helm-multi-files)
-      (define-key evil-insert-state-map (kbd "C-f") 'helm-multi-files)))
+      (evil-leader/set-key "ov" 'set-variable)))
 
   (spacemacs|use-package-add-hook helm
     :post-config
@@ -250,6 +243,7 @@ before layers configuration."
       (define-key global-map [remap switch-to-buffer] 'helm-buffers-list)
       (define-key global-map [remap apropos-command] 'helm-apropos)
       (define-key global-map [remap info-emacs-manual] 'helm-info-emacs)
+      (define-key global-map [remap find-file] 'helm-find-files)
 
       ;; user keybinds
       (define-key global-map (kbd "C-c t") 'helm-gtags-select)
@@ -343,6 +337,10 @@ layers configuration."
   ;; load custom file
   (setq custom-file "~/.spacemacs.d/custom.el")
   (load custom-file)
+
+  ;; load keybindings (wip)
+  (when (file-exists-p "~/.spacemacs.d/keybinds.el")
+    (load "~/.spacemacs.d/keybinds.el"))
 
   ;; introductions are in order...
   (setq user-full-name "Christopher McCloud"
