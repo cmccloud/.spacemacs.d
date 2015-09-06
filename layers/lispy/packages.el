@@ -19,6 +19,7 @@
 (defun lispy/init-lispy ()
   (use-package lispy
     :diminish lispy-mode " Ⓛ"
+    :commands (lispy-toggle lipsy-enter-maybe lispy-exit lispy-mode)
     :preface
     (progn
       (defvar lispy-major-modes '(emacs-lisp-mode clojure-mode)
@@ -40,36 +41,32 @@ Used by `lispy-enter-maybe'.")
         (if lispy-mode (lispy-mode -1) (lispy-mode))))
     :config
     (progn
+      ;; Integrate lispy with evil jumper
+      (with-eval-after-load "evil-jumper"
+        (defadvice lispy-ace-symbol
+            (before lispy-track-jump activate)
+          (funcall #'evil-jumper--set-jump))
+        (defadvice lispy-ace-paren
+            (before lispy-track-jump activate)
+          (funcall #'evil-jumper--set-jump)))
+
       ;; lispy keybindings
-      (lispy-set-key-theme '(special paraedit c-digits))
-      (define-key lispy-mode-map (kbd "C-c l") 'lispy-toggle)
-      (define-key lispy-mode-map (kbd "C-f") 'helm-multi-files)
-      (define-key lispy-mode-map (kbd "C-?") 'helm-descbinds)
+      (lispy-set-key-theme '(special c-digits lispy))
+      (define-key evil-emacs-state-map (kbd "M-C-n") 'lispy-forward)
+      (define-key evil-emacs-state-map (kbd "M-C-p") 'lispy-backward)
+      (define-key evil-emacs-state-map (kbd "M-u") 'undo)
       (define-key lispy-mode-map (kbd "C-o") 'evil-jumper/backward)
       (define-key lispy-mode-map (kbd "TAB") 'evil-jumper/forward)
-      (define-key lispy-mode-map (kbd "C-n") 'lispy-forward)
-      (define-key lispy-mode-map (kbd "C-p") 'lispy-backward)
-      (define-key lispy-mode-map (kbd "C-l") 'forward-char)
-      (define-key lispy-mode-map (kbd "C-h") 'backward-char)
-      (define-key lispy-mode-map (kbd "M-u") 'lispy-undo)
       (define-key lispy-mode-map (kbd "[") 'lispy-brackets)
       (define-key lispy-mode-map (kbd "{") 'lispy-braces)
-      (define-key lispy-mode-map (kbd "M-p") 'lispy-move-up)
-      (define-key lispy-mode-map (kbd "M-n") 'lispy-move-down)
-      (define-key lispy-mode-map (kbd "C-s") 'helm-occur)
-      (define-key lispy-mode-map (kbd "DEL") 'lispy-delete-backward)
-
+      (define-key lispy-mode-map (kbd "<M-return>") nil)
+      (define-key lispy-mode-map-lispy (kbd "<M-return>") nil)
       ;; use lispy-define-key for new specials
       ;; :inserter defaults to self-insert-command
       ;; but can be explicitly set as well
       ;; :override takes a quoted form and allows to add
       ;; conditionals, see abo-abo/lispy#111
-      (lispy-define-key lispy-mode-map (kbd "b") 'lispy-barf)
-      (lispy-define-key lispy-mode-map (kbd "s") 'lispy-slurp)
-      (lispy-define-key lispy-mode-map (kbd "y") 'lispy-new-copy)
-      (lispy-define-key lispy-mode-map (kbd "p") 'lispy-yank)
-      (lispy-define-key lispy-mode-map (kbd "g") 'lispy-goto-local)
-      (lispy-define-key lispy-mode-map (kbd "G") 'lispy-goto))))
+      )))
 
 (defun lispy/pre-init-evil ()
   (spacemacs|use-package-add-hook evil
@@ -78,3 +75,4 @@ Used by `lispy-enter-maybe'.")
       (define-key evil-emacs-state-map (kbd "C-c l") 'lispy-toggle)
       (add-hook 'evil-emacs-state-entry-hook #'lispy-enter-maybe)
       (add-hook 'evil-emacs-state-exit-hook #'lispy-exit))))
+

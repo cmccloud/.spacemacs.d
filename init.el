@@ -20,6 +20,7 @@
             shell-default-height 30
             shell-default-position 'bottom
             shell-default-shell 'eshell)
+     evil-snipe
      syntax-checking
      spell-checking
      erc
@@ -34,8 +35,8 @@
      markdown
      lua
      ;; my configuration layers
-     lively
      lispy
+     lively
      doc-view-compatibility
      evil-cleverparens
      edebug
@@ -50,6 +51,10 @@
    '(cl-lib-highlight
      flycheck-clojure
      helm-gtags
+     monokai-theme
+     arjen-grey-theme
+     zenburn-theme
+     leuven-theme
      material-theme
      color-theme-sanityinc-tomorrow
      base16-theme)
@@ -87,14 +92,12 @@ before layers configuration."
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(zenburn
-                         spacemacs-light
-                         spacemacs-dark
                          solarized-light
                          solarized-dark
-                         leuven
-                         monokai)
+                         spacemacs-light
+                         spacemacs-dark)
    ;; If non nil the cursor color matches the state color.
-   dotspacemacs-colorize-cursor-according-to-state t
+   dotspacemacs-colorize-cursor-according-to-state nil
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
    dotspacemacs-default-font '("M+ 1mn"
@@ -103,7 +106,7 @@ before layers configuration."
                                :width normal
                                :powerline-scale 1.1)
    ;; The leader key
-   dotspacemacs-leader-key "M-m"
+   dotspacemacs-leader-key "SPC"
    ;; The leader key accessible in `emacs state' and `insert state'
    dotspacemacs-emacs-leader-key "M-m"
    ;; Major mode leader key is a shortcut key which is the equivalent of
@@ -210,6 +213,11 @@ before layers configuration."
       (evil-leader/set-key "or" 'popwin-pop-repl)
       (evil-leader/set-key "ov" 'set-variable)))
 
+  (spacemacs|use-package-add-hook evil-snipe
+    :post-init
+    (progn
+      (setq evil-snipe-enable-alternate-f-and-t-behaviors t)))
+
   (spacemacs|use-package-add-hook helm
     :post-config
     (progn
@@ -219,7 +227,8 @@ before layers configuration."
         (helm-find-files-1 "/sudo::/"))
 
       ;; add colors to remote connections
-      (setq helm-ff-tramp-not-fancy nil)
+      (setq helm-ff-tramp-not-fancy nil
+            helm-echo-input-in-header-line nil)
 
       ;; helm for files settings
       (setq helm-for-files-preferred-list
@@ -238,12 +247,15 @@ before layers configuration."
 
       ;; prefer helm when available
       (define-key global-map [remap info] 'helm-info-at-point)
+      (define-key global-map [remap ido-find-file] 'helm-find-files)
       (define-key global-map [remap find-file] 'helm-find-files)
       (define-key global-map [remap list-buffers] 'helm-buffers-list)
       (define-key global-map [remap switch-to-buffer] 'helm-buffers-list)
       (define-key global-map [remap apropos-command] 'helm-apropos)
       (define-key global-map [remap info-emacs-manual] 'helm-info-emacs)
-      (define-key global-map [remap find-file] 'helm-find-files)
+      (define-key global-map (kbd "C-x C-f") 'helm-find-files)
+      (define-key global-map (kbd "C-x C-b") 'helm-multi-files)
+      (define-key global-map (kbd "C-x b") 'helm-multi-files)
 
       ;; user keybinds
       (define-key global-map (kbd "C-c t") 'helm-gtags-select)
@@ -300,7 +312,7 @@ before layers configuration."
             erc-track-exclude-server-buffer t
             erc-track-position-in-mode-line t
             erc-join-buffer 'bury
-            erc-hl-nicks-minimum-contrast-ratio 3.5
+            erc-hl-nicks-minimum-contrast-ratio 2.5
             erc-hl-nicks-color-contrast-strategy '(invert contrast)
             erc-current-nick-highlight-type 'all
             erc-log-insert-log-on-open nil
@@ -371,17 +383,23 @@ layers configuration."
   (setq powerline-default-separator nil
         avy-all-windows nil
         avy-background t
+        evil-cross-lines t
         doc-view-continuous t
+        helm-echo-input-in-header-line nil
         sp-show-pair-from-inside t      ; accounts for evil
         lispy-no-permanent-semantic t
         eshell-buffer-maximum-lines 2000
+        cursor-in-non-selected-windows nil
         paradox-github-token t
         magit-push-always-verify nil
         even-window-heights nil
         flycheck-highlighting-mode nil
         echo-keystrokes .02
-        smooth-scroll-margin 4               ; helps scroll lag for now
+        smooth-scroll-margin 4          ; helps scroll lag for now
         cider-ovelays-use-font-lock t)
+
+  ;; keybinds
+  (evil-leader/set-key "m M-RET" 'avy-goto-word-or-subword-1)
 
   ;; defaults
   (semantic-mode)
@@ -398,5 +416,6 @@ layers configuration."
   ;; performance
   (setq-default bidi-display-reordering nil
                 max-lisp-eval-depth 30000
+                cursor-in-non-selected-windows nil
                 max-specpdl-size 30000
                 large-file-warning-threshold 25000000))

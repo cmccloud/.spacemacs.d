@@ -21,4 +21,11 @@
     (progn
       (evil-leader/set-key (kbd "tc") 'evil-cleverparens-mode)
       (add-hook 'emacs-lisp-mode-hook #'evil-cleverparens-mode)
-      (add-hook 'clojure-mode-hook #'evil-cleverparens-mode))))
+      (add-hook 'clojure-mode-hook #'evil-cleverparens-mode)
+      ;; Don't shadow evil snipe
+      (add-hook 'evil-cleverparens-mode-hook
+                (lambda () (when evil-snipe-mode
+                             (evil-define-key 'normal evil-cleverparens-mode-map
+                               "s" 'evil-snipe-s)
+                             (evil-define-key 'normal evil-cleverparens-mode-map
+                               "S" 'evil-snipe-S)))))))
