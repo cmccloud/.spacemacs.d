@@ -396,8 +396,8 @@ layers configuration."
         even-window-heights nil
         flycheck-highlighting-mode nil
         echo-keystrokes .02
-        smooth-scroll-margin 4)         ; helps scroll lag for now
-        ; cider-ovelays-use-font-lock t)
+        smooth-scroll-margin 4         ; helps scroll lag for now
+        cider-ovelays-use-font-lock t)
 
   ;; keybinds
   (evil-leader/set-key "m M-RET" 'avy-goto-word-or-subword-1)
