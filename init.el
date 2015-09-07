@@ -91,19 +91,18 @@ before layers configuration."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(zenburn
-                         solarized-light
+   dotspacemacs-themes '(solarized-light
                          solarized-dark
+                         zenburn
                          spacemacs-light
                          spacemacs-dark)
    ;; If non nil the cursor color matches the state color.
    dotspacemacs-colorize-cursor-according-to-state nil
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
-   dotspacemacs-default-font '("M+ 1mn"
+   dotspacemacs-default-font '("Input"
                                :size 14
                                :weight normal
-                               :width normal
                                :powerline-scale 1.1)
    ;; The leader key
    dotspacemacs-leader-key "SPC"
@@ -221,15 +220,6 @@ before layers configuration."
   (spacemacs|use-package-add-hook helm
     :post-config
     (progn
-      ;; sometimes we need to edit system files
-      (defun helm-find-files-as-sudo ()
-        (interactive)
-        (helm-find-files-1 "/sudo::/"))
-
-      ;; add colors to remote connections
-      (setq helm-ff-tramp-not-fancy nil
-            helm-echo-input-in-header-line nil)
-
       ;; helm for files settings
       (setq helm-for-files-preferred-list
             '(helm-source-buffers-list
@@ -237,7 +227,9 @@ before layers configuration."
               helm-source-recentf
               helm-source-file-cache
               helm-source-locate
-              helm-source-buffer-not-found))
+              helm-source-buffer-not-found)
+            ;; add colors to remote connections
+            helm-ff-tramp-not-fancy nil)
 
       ;; helm projectile sources
       (with-eval-after-load "helm-projectile"
@@ -253,7 +245,6 @@ before layers configuration."
       (define-key global-map [remap switch-to-buffer] 'helm-buffers-list)
       (define-key global-map [remap apropos-command] 'helm-apropos)
       (define-key global-map [remap info-emacs-manual] 'helm-info-emacs)
-      (define-key global-map (kbd "C-x C-f") 'helm-find-files)
       (define-key global-map (kbd "C-x C-b") 'helm-multi-files)
       (define-key global-map (kbd "C-x b") 'helm-multi-files)
 
@@ -366,15 +357,26 @@ layers configuration."
           mac-command-key-is-meta t
           mac-command-modifier 'meta
           mac-option-modifier 'super)
+
+    ;; use mdfind rather than locate
+    (with-eval-after-load "helm-locate"
+      (setq helm-locate-command "mdfind -name %s %s"
+            helm-locate-fuzzy-match nil))
+
     ;; have we installed coreutils?
     (if (executable-find "gls")
         (setq insert-directory-program "gls"
               dired-listing-switches "-al --group-directories-first")
       (setq dired-listing-switches "-al"))
-    ;; use mdfind rather than locate
-    (with-eval-after-load "helm-locate"
-      (setq helm-locate-command "mdfind -name %s %s"
-            helm-locate-fuzzy-match nil))
+
+    ;; better grep
+    (when (executable-find "ggrep")
+      (with-eval-after-load "helm"
+        (setq helm-grep-default-command
+              "ggrep --color=always -a -d skip %e -n%cH -e %p %f"
+              helm-grep-default-recurse-command
+              "ggrep --color=always -a -d recurse %e -n%cH -e %p %f")))
+
     ;; used marked2.app for markdown live preview
     (when (executable-find "marked")
       (setq markdown-open-command "marked")))
@@ -385,7 +387,6 @@ layers configuration."
         avy-background t
         evil-cross-lines t
         doc-view-continuous t
-        helm-echo-input-in-header-line nil
         sp-show-pair-from-inside t      ; accounts for evil
         lispy-no-permanent-semantic t
         eshell-buffer-maximum-lines 2000
@@ -395,8 +396,8 @@ layers configuration."
         even-window-heights nil
         flycheck-highlighting-mode nil
         echo-keystrokes .02
-        smooth-scroll-margin 4          ; helps scroll lag for now
-        cider-ovelays-use-font-lock t)
+        smooth-scroll-margin 4)         ; helps scroll lag for now
+        ; cider-ovelays-use-font-lock t)
 
   ;; keybinds
   (evil-leader/set-key "m M-RET" 'avy-goto-word-or-subword-1)

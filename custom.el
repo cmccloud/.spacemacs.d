@@ -13,16 +13,11 @@
  '(ahs-inhibit-face-list nil)
  '(ansi-color-faces-vector
    [default bold shadow italic underline bold bold-italic bold])
- '(ansi-color-names-vector
-   ["#eee8d5" "#dc322f" "#859900" "#b58900" "#268bd2" "#d33682" "#2aa198" "#839496"])
  '(compilation-message-face (quote default))
  '(cua-global-mark-cursor-color "#2aa198")
  '(cua-normal-cursor-color "#657b83")
  '(cua-overwrite-cursor-color "#b58900")
  '(cua-read-only-cursor-color "#859900")
- '(custom-safe-themes
-   (quote
-    ("a444b2e10bedc64e4c7f312a737271f9a2f2542c67caa13b04d525196562bf38" default)))
  '(erc-autoaway-idle-seconds 600)
  '(erc-autojoin-mode t)
  '(erc-button-mode t)
@@ -60,7 +55,6 @@
  '(erc-track-position-in-mode-line t)
  '(erc-track-shorten-aggressively (quote max))
  '(erc-youtube-mode t)
- '(fci-rule-color "#eee8d5")
  '(helm-M-x-fuzzy-match t)
  '(helm-ag-always-set-extra-option t)
  '(helm-always-two-windows t)
@@ -73,12 +67,12 @@
  '(helm-display-header-line nil)
  '(helm-echo-input-in-header-line t)
  '(helm-file-cache-fuzzy-match t)
- '(helm-imenu-fuzzy-match t t)
+ '(helm-imenu-fuzzy-match t)
  '(helm-lisp-fuzzy-completion t)
  '(helm-locate-fuzzy-match t)
  '(helm-mode t)
  '(helm-recentf-fuzzy-match t)
- '(helm-semantic-fuzzy-match t t)
+ '(helm-semantic-fuzzy-match t)
  '(helm-split-window-in-side-p t)
  '(helm-swoop-speed-or-color t)
  '(helm-swoop-split-with-multiple-windows t)
@@ -105,9 +99,6 @@
  '(hl-fg-colors
    (quote
     ("#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3")))
- '(hl-paren-colors
-   (quote
-    ("#B9F" "#B8D" "#B7B" "#B69" "#B57" "#B45" "#B33" "#B11")) t)
  '(lispy-avy-style-char (quote at))
  '(lispy-avy-style-symbol (quote post))
  '(lispy-completion-method (quote default))
@@ -121,32 +112,8 @@
  '(rainbow-delimiters-max-face-count 3)
  '(ring-bell-function (quote ignore) t)
  '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#eee8d5" 0.2))
- '(solarized-distinct-fringe-background nil)
- '(solarized-high-contrast-mode-line nil)
  '(term-default-bg-color "#fdf6e3")
  '(term-default-fg-color "#657b83")
- '(vc-annotate-background nil)
- '(vc-annotate-color-map
-   (quote
-    ((20 . "#dc322f")
-     (40 . "#c85d17")
-     (60 . "#be730b")
-     (80 . "#b58900")
-     (100 . "#a58e00")
-     (120 . "#9d9100")
-     (140 . "#959300")
-     (160 . "#8d9600")
-     (180 . "#859900")
-     (200 . "#669b32")
-     (220 . "#579d4c")
-     (240 . "#489e65")
-     (260 . "#399f7e")
-     (280 . "#2aa198")
-     (300 . "#2898af")
-     (320 . "#2793ba")
-     (340 . "#268fc6")
-     (360 . "#268bd2"))))
- '(vc-annotate-very-old-color nil)
  '(weechat-color-list
    (quote
     (unspecified "#fdf6e3" "#eee8d5" "#990A1B" "#dc322f" "#546E00" "#859900" "#7B6000" "#b58900" "#00629D" "#268bd2" "#93115C" "#d33682" "#00736F" "#2aa198" "#657b83" "#839496")))
