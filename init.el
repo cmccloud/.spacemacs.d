@@ -245,6 +245,7 @@ before layers configuration."
       (define-key global-map [remap switch-to-buffer] 'helm-buffers-list)
       (define-key global-map [remap apropos-command] 'helm-apropos)
       (define-key global-map [remap info-emacs-manual] 'helm-info-emacs)
+      (define-key global-map (kbd "C-x C-f") 'helm-find-files)
       (define-key global-map (kbd "C-x C-b") 'helm-multi-files)
       (define-key global-map (kbd "C-x b") 'helm-multi-files)
 
@@ -332,7 +333,7 @@ before layers configuration."
        "*trace-output*"
        "*Diff*"))))
 
-(defun dotspacemacs/config ()
+(defun dotspacemacs/user-config ()
   "Configuration function.
  This function is called at the very end of Spacemacs initialization after
 layers configuration."
@@ -358,16 +359,16 @@ layers configuration."
           mac-command-modifier 'meta
           mac-option-modifier 'super)
 
-    ;; use mdfind rather than locate
-    (with-eval-after-load "helm-locate"
-      (setq helm-locate-command "mdfind -name %s %s"
-            helm-locate-fuzzy-match nil))
-
     ;; have we installed coreutils?
     (if (executable-find "gls")
         (setq insert-directory-program "gls"
               dired-listing-switches "-al --group-directories-first")
       (setq dired-listing-switches "-al"))
+
+    ;; use mdfind rather than locate
+    (with-eval-after-load "helm-locate"
+      (setq helm-locate-command "mdfind -name %s %s"
+            helm-locate-fuzzy-match nil))
 
     ;; better grep
     (when (executable-find "ggrep")
@@ -387,8 +388,7 @@ layers configuration."
         avy-background t
         evil-cross-lines t
         doc-view-continuous t
-        sp-show-pair-from-inside t      ; accounts for evil
-        lispy-no-permanent-semantic t
+        sp-show-pair-from-inside t
         eshell-buffer-maximum-lines 2000
         cursor-in-non-selected-windows nil
         paradox-github-token t
@@ -396,7 +396,7 @@ layers configuration."
         even-window-heights nil
         flycheck-highlighting-mode nil
         echo-keystrokes .02
-        smooth-scroll-margin 4         ; helps scroll lag for now
+        smooth-scroll-margin 4          ; helps scroll lag for now
         cider-ovelays-use-font-lock t)
 
   ;; keybinds
@@ -413,6 +413,8 @@ layers configuration."
             'rainbow-delimiters-mode)
   (with-eval-after-load "flycheck"
     (flycheck-clojure-setup))
+  (add-hook 'before-save-hook
+            'delete-trailing-whitespace)
 
   ;; performance
   (setq-default bidi-display-reordering nil

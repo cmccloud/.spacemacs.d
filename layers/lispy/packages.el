@@ -50,6 +50,10 @@ Used by `lispy-enter-maybe'.")
             (before lispy-track-jump activate)
           (funcall #'evil-jumper--set-jump)))
 
+      ;; lispy settings
+      (setq lispy-eval-display-style 'message
+            lispy-no-permanent-semantic nil)
+
       ;; lispy keybindings
       (lispy-set-key-theme '(special c-digits lispy))
       (define-key evil-emacs-state-map (kbd "M-C-n") 'lispy-forward)
@@ -61,6 +65,7 @@ Used by `lispy-enter-maybe'.")
       (define-key lispy-mode-map (kbd "{") 'lispy-braces)
       (define-key lispy-mode-map (kbd "<M-return>") nil)
       (define-key lispy-mode-map-lispy (kbd "<M-return>") nil)
+      (evil-leader/set-key "m m" 'lispy-mark-symbol)
       ;; use lispy-define-key for new specials
       ;; :inserter defaults to self-insert-command
       ;; but can be explicitly set as well
@@ -75,4 +80,3 @@ Used by `lispy-enter-maybe'.")
       (define-key evil-emacs-state-map (kbd "C-c l") 'lispy-toggle)
       (add-hook 'evil-emacs-state-entry-hook #'lispy-enter-maybe)
       (add-hook 'evil-emacs-state-exit-hook #'lispy-exit))))
-
