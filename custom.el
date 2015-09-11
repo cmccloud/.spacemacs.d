@@ -63,7 +63,6 @@
  '(helm-buffers-fuzzy-matching t)
  '(helm-descbinds-mode t)
  '(helm-descbinds-window-style (quote split))
- '(helm-display-function (quote spacemacs//display-helm-at-bottom))
  '(helm-display-header-line nil)
  '(helm-echo-input-in-header-line nil)
  '(helm-ff-tramp-not-fancy nil)

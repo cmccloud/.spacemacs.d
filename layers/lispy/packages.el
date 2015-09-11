@@ -19,8 +19,8 @@
 (defun lispy/init-lispy ()
   (use-package lispy
     :diminish lispy-mode " Ⓛ"
-    :commands (lispy-toggle lipsy-enter-maybe lispy-exit lispy-mode)
-    :preface
+    :commands (lispy-mode lispy-enter-maybe lispy-toggle)
+    :init
     (progn
       (defvar lispy-major-modes '(emacs-lisp-mode clojure-mode)
         "List of major modes associated with lispy.
@@ -41,6 +41,12 @@ Used by `lispy-enter-maybe'.")
         (if lispy-mode (lispy-mode -1) (lispy-mode))))
     :config
     (progn
+      ;; Did hydra install correctly?
+      ;; still not working
+      (unless (fboundp 'lh-knight/nil)
+        (save-window-excursion
+          (find-library "lispy")
+          (byte-compile-file (buffer-file-name) t)))
       ;; Integrate lispy with evil jumper
       (with-eval-after-load "evil-jumper"
         (defadvice lispy-ace-symbol

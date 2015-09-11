@@ -24,6 +24,8 @@
     :commands (mu4e mu4e-compose-new)
     :init
     (progn
+      (defvar mu4e-update-timer nil
+        "Location of mu4e background update process. Used with `cancel-timer'.")
       (evil-leader/set-key "am" 'mu4e)
       (global-set-key (kbd "C-c m") 'mu4e-compose-new))
     :config
@@ -159,7 +161,7 @@
 
       (setq mu4e-get-mail-command "offlineimap -q"
             mu4e-attachment-dir "~/Downloads"
-            mu4e-update-interval (* 60 5)
+            mu4e-update-interval nil
             mu4e-confirm-quit nil
             mu4e-view-show-images t
             mu4e-view-prefer-html t
@@ -172,6 +174,11 @@
 
       ;; dont ask for confirmation when killing an email
       (setq message-kill-buffer-query nil)
+
+      ;; background updates
+      (setq mu4e-update-timer
+            (run-at-time (* 60 1) (* 60 5)
+                         'mu4e-update-mail-and-index t))
 
       ;; maildirs
       (setq mu4e-maildir "~/.mail/gmail"
