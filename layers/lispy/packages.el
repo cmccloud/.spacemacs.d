@@ -22,7 +22,7 @@
     :commands (lispy-mode lispy-enter-maybe lispy-toggle)
     :init
     (progn
-      (defvar lispy-major-modes '(emacs-lisp-mode clojure-mode)
+      (defvar lispy-major-modes '(emacs-lisp-mode clojure-mode clojurescript-mode)
         "List of major modes associated with lispy.
 Used by `lispy-enter-maybe'.")
 
