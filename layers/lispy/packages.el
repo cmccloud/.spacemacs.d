@@ -38,15 +38,10 @@ Used by `lispy-enter-maybe'.")
       (defun lispy-toggle ()
         "Toggles lispy mode."
         (interactive)
-        (if lispy-mode (lispy-mode -1) (lispy-mode))))
+        (if lispy-mode (lispy-mode -1) (lispy-mode)))
+      (spacemacs/load-or-install-package hydra))
     :config
     (progn
-      ;; Did hydra install correctly?
-      ;; still not working
-      (unless (fboundp 'lh-knight/nil)
-        (save-window-excursion
-          (find-library "lispy")
-          (byte-compile-file (buffer-file-name) t)))
       ;; Integrate lispy with evil jumper
       (with-eval-after-load "evil-jumper"
         (defadvice lispy-ace-symbol
@@ -62,16 +57,12 @@ Used by `lispy-enter-maybe'.")
 
       ;; lispy keybindings
       (lispy-set-key-theme '(special c-digits lispy))
-      (define-key evil-emacs-state-map (kbd "M-C-n") 'lispy-forward)
-      (define-key evil-emacs-state-map (kbd "M-C-p") 'lispy-backward)
-      (define-key evil-emacs-state-map (kbd "M-u") 'undo)
       (define-key lispy-mode-map (kbd "C-o") 'evil-jumper/backward)
       (define-key lispy-mode-map (kbd "TAB") 'evil-jumper/forward)
       (define-key lispy-mode-map (kbd "[") 'lispy-brackets)
       (define-key lispy-mode-map (kbd "{") 'lispy-braces)
       (define-key lispy-mode-map (kbd "<M-return>") nil)
       (define-key lispy-mode-map-lispy (kbd "<M-return>") nil)
-      (evil-leader/set-key "m m" 'lispy-mark-symbol)
       ;; use lispy-define-key for new specials
       ;; :inserter defaults to self-insert-command
       ;; but can be explicitly set as well
@@ -83,6 +74,10 @@ Used by `lispy-enter-maybe'.")
   (spacemacs|use-package-add-hook evil
     :post-config
     (progn
+      (define-key evil-emacs-state-map (kbd "M-C-n") 'lispy-forward)
+      (define-key evil-emacs-state-map (kbd "M-C-p") 'lispy-backward)
+      (define-key evil-emacs-state-map (kbd "M-u") 'undo)
       (define-key evil-emacs-state-map (kbd "C-c l") 'lispy-toggle)
+      (evil-leader/set-key "m m" 'lispy-mark-symbol)
       (add-hook 'evil-emacs-state-entry-hook #'lispy-enter-maybe)
       (add-hook 'evil-emacs-state-exit-hook #'lispy-exit))))
