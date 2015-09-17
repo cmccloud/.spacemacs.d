@@ -246,6 +246,13 @@ user code."
       (evil-leader/set-key "or" 'popwin-pop-repl)
       (evil-leader/set-key "ov" 'set-variable)))
 
+  (spacemacs|use-package-add-hook evil-escape
+    :post-config
+    (progn
+      ;; supress evil escape when lispy mode active
+      (push (lambda () (not (bound-and-true-p lispy-mode)))
+            evil-escape-suppressed-predicates)))
+
   (spacemacs|use-package-add-hook evil-snipe
     :post-init
     (progn
@@ -455,5 +462,6 @@ layers configuration."
                 jit-lock-stealth-time 3
                 max-lisp-eval-depth 30000
                 cursor-in-non-selected-windows nil
+                helm-swoop-speed-or-color nil
                 max-specpdl-size 30000
                 large-file-warning-threshold 25000000))

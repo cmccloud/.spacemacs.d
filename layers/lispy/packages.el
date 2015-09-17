@@ -39,7 +39,7 @@ Used by `lispy-enter-maybe'.")
         "Toggles lispy mode."
         (interactive)
         (if lispy-mode (lispy-mode -1) (lispy-mode)))
-      (spacemacs/load-or-install-package hydra))
+      (spacemacs/load-or-install-package 'hydra))
     :config
     (progn
       ;; Integrate lispy with evil jumper
