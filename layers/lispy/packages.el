@@ -39,6 +39,8 @@ Used by `lispy-enter-maybe'.")
         "Toggles lispy mode."
         (interactive)
         (if lispy-mode (lispy-mode -1) (lispy-mode)))
+
+      ;; require hydra before lispy loads
       (spacemacs/load-or-install-package 'hydra))
     :config
     (progn

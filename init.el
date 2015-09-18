@@ -44,7 +44,6 @@ values."
      lispy
      lively
      doc-view-compatibility
-     evil-cleverparens
      edebug
      persp-mode
      popwin-pop-repl
@@ -429,7 +428,6 @@ layers configuration."
         avy-background t
         evil-cross-lines t
         doc-view-continuous t
-        sp-show-pair-from-inside t
         eshell-buffer-maximum-lines 2000
         cursor-in-non-selected-windows nil
         paradox-github-token t
