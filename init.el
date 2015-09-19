@@ -42,7 +42,6 @@ values."
      lua
      ;; my configuration layers
      lispy
-     lively
      doc-view-compatibility
      edebug
      persp-mode

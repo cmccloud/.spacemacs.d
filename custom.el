@@ -76,7 +76,7 @@
  '(helm-recentf-fuzzy-match t)
  '(helm-semantic-fuzzy-match t)
  '(helm-split-window-in-side-p t)
- '(helm-swoop-speed-or-color t)
+ '(helm-swoop-speed-or-color nil)
  '(helm-swoop-split-with-multiple-windows t)
  '(highlight-changes-colors (quote ("#d33682" "#6c71c4")))
  '(highlight-symbol-colors
