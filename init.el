@@ -9,7 +9,7 @@ values."
   (setq-default
    ;; Base distribution to use. This is a layer contained in the directory
    ;; `+distribution'. For now available distributions are `spacemacs-base'
-   ;; or `spacemacs'. (default 'spacemacs-base)
+   ;; or `spacemacs'. (default 'spacemacs)
    dotspacemacs-distribution 'spacemacs
    ;; List of additional paths where to look for configuration layers.
    ;; Paths must have a trailing slash (i.e. `~/.mycontribs/')
@@ -128,6 +128,8 @@ values."
    ;; By default the command key is `:' so ex-commands are executed like in Vim
    ;; with `:' and Emacs commands are executed with `<leader> :'.
    dotspacemacs-command-key ":"
+   ;; If non nil `Y' is remapped to `y$'. (default t)
+   dotspacemacs-remap-Y-to-y$ t
    ;; Location where to auto-save files. Possible values are `original' to
    ;; auto-save the file in-place, `cache' to auto-save the file to another
    ;; file stored in the cache directory and `nil' to disable auto-saving.
@@ -137,7 +139,7 @@ values."
    ;; `find-files' (SPC f f), `find-spacemacs-file' (SPC f e s), and
    ;; `find-contrib-file' (SPC f e c) are replaced. (default nil)
    dotspacemacs-use-ido nil
-   ;; If non nil, `helm' will try to miminimize the space it uses. (default nil)
+   ;; If non nil, `helm' will try to minimize the space it uses. (default nil)
    dotspacemacs-helm-resize nil
    ;; if non nil, the helm header is hidden when there is only one source.
    ;; (default nil)
@@ -248,8 +250,8 @@ user code."
     :post-config
     (progn
       ;; supress evil escape when lispy mode active
-      (push (lambda () (not (bound-and-true-p lispy-mode)))
-            evil-escape-suppressed-predicates)))
+      (push (lambda () (bound-and-true-p lispy-mode))
+            evil-escape-inhibit-functions)))
 
   (spacemacs|use-package-add-hook evil-snipe
     :post-init
@@ -434,7 +436,7 @@ layers configuration."
         even-window-heights nil
         flycheck-highlighting-mode nil
         echo-keystrokes .02
-        smooth-scroll-margin 4          ; helps scroll lag for now
+        smooth-scroll-margin 4         ; helps scroll lag for now
         cider-ovelays-use-font-lock t)
 
   ;; keybinds
