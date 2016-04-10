@@ -29,7 +29,7 @@ values."
             shell-default-height 30
             shell-default-position 'bottom
             shell-default-shell 'ansi-term)
-     helm-spacemacs
+     spacemacs-helm
      emacs-lisp
      clojure
      javascript
@@ -48,6 +48,7 @@ values."
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
    dotspacemacs-additional-packages '(
+                                      lispy
                                       )
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '(
@@ -108,10 +109,10 @@ values."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(zenburn
+   dotspacemacs-themes '(solarized-light
+                         zenburn
                          spacemacs-dark
                          spacemacs-light
-                         solarized-light
                          solarized-dark
                          leuven
                          monokai
@@ -120,7 +121,7 @@ values."
    dotspacemacs-colorize-cursor-according-to-state nil
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
-   dotspacemacs-default-font '("Menlo"
+   dotspacemacs-default-font '("Input"
                                :size 13
                                :weight normal
                                :width normal
@@ -238,7 +239,7 @@ values."
    dotspacemacs-highlight-delimiters 'all
    ;; If non nil advises quit functions to keep server open when quitting.
    ;; (default nil)
-   dotspacemacs-persistent-server nil
+   dotspacemacs-persistent-server t
    ;; List of search tool executable names. Spacemacs uses the first installed
    ;; tool of the list. Supported tools are `ag', `pt', `ack' and `grep'.
    ;; (default '("ag" "pt" "ack" "grep"))
@@ -252,8 +253,7 @@ values."
    ;; `trailing' to delete only the whitespace at end of lines, `changed'to
    ;; delete only whitespace for changed lines or `nil' to disable cleanup.
    ;; (default nil)
-   dotspacemacs-whitespace-cleanup 'trailing
-   ))
+   dotspacemacs-whitespace-cleanup 'trailing))
 
 (defun dotspacemacs/user-init ()
   "Initialization function for user code.
@@ -277,15 +277,11 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place you code here."
 
+  ;; appearance
+  (setq powerline-default-separator nil)
+
   ;; load keybindings (wip)
   ;; Lets keep some keys constant across all modes
-
-  ;; TODO - Try to get lispy running acceptably
-  ;; - can imenu be preserved?
-  ;; - can evil-escape key sequence issue be supressed?
-  ;; - can semantic be used with lispy?
-
-  ;; (setq imenu-create-index-function 'imenu-default-create-index-function)
   (bind-keys :map evil-emacs-state-map
              ("M-u" . undo-tree-undo)
              ("C-s" . helm-swoop))
@@ -331,6 +327,27 @@ you should place you code here."
         user-login-name "cmccloud"
         user-mail-address "mccloud.christopher@gmail.com")
 
+  ;; basic lispy config -- wip
+  (defvar lispy-toggled-modes '(clojure-mode emacs-lisp-mode))
+  (defun lispy-toggle-maybe ()
+    (if (-contains? lispy-toggled-modes major-mode)
+        (lispy-mode 1)))
+  (add-hook 'lispy-mode-hook
+            (lambda () (setq imenu-create-index-function
+                             'imenu-default-create-index-function)))
+  (add-hook 'evil-emacs-state-entry-hook
+            'lispy-toggle-maybe)
+  (add-hook 'evil-emacs-state-exit-hook
+            (lambda () (lispy-mode -1)))
+  (bind-key "M-m M-m" 'lispy-mark-symbol)
+  (eval-after-load 'lispy
+    '(progn (lispy-define-key lispy-mode-map "g" 'helm-semantic-or-imenu)
+            (add-to-list 'evil-escape-inhibit-functions
+                         (lambda () lispy-mode))))
+
+  (setq-default lispy-eval-display-style 'overlay)
+  ;; Yassnippet and company mode
+
   ;; osx config
   (when (eq system-type 'darwin)
     ;; something like the old space cadet keyboard
@@ -360,4 +377,7 @@ you should place you code here."
 
     ;; used marked2.app for markdown live preview
     (when (executable-find "marked")
-      (setq markdown-open-command "marked"))))
+      (setq markdown-open-command "marked")))
+
+  ;; auto-save layouts
+  (spacemacs//layout-autosave))
